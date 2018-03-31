@@ -40,6 +40,6 @@ input[type=checkbox]:checked + .genre-answer-check {
   border: 4px solid lighten($color-orange, 15%);
 }
 
-.genre-answer-send:hover {
+.genre-answer-send:hover:not(:disabled) {
   color: $color-orange;
 }

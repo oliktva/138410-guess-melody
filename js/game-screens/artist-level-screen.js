@@ -68,7 +68,7 @@ const answerHandler = function () {
   renderScreen(genreLevelScreenElement);
 };
 
-Array.from(artistLevelScreenElement.querySelectorAll(`.main-answer-wrapper`)).forEach(
+Array.from(artistLevelScreenElement.querySelectorAll(`.main-answer`)).forEach(
     (element) => addClickEvent(element, answerHandler)
 );
 

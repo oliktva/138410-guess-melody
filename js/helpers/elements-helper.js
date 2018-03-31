@@ -19,9 +19,11 @@ export const getElementFromTemplate = function (markup) {
  */
 export const addClickEvent = function (element, handler) {
   element.addEventListener(`click`, handler);
-  element.addEventListener(`keydown`, (evt) => {
-    if (evt.keyCode === KeyCodes.ENTER) {
-      handler();
-    }
-  });
+  if (element.tagName !== `button`) {
+    element.addEventListener(`keydown`, (evt) => {
+      if (evt.keyCode === KeyCodes.ENTER) {
+        handler();
+      }
+    });
+  }
 };

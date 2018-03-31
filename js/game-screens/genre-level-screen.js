@@ -83,15 +83,15 @@ const genreLevelScreenElement = getElementFromTemplate(
             <label class="genre-answer-check" for="a-4"></label>
           </div>
 
-          <button class="genre-answer-send" type="submit">Ответить</button>
+          <button class="genre-answer-send" type="submit" disabled>Ответить</button>
         </form>
       </div>
     </section>`
 );
 
 /**
- * @param  {number} min
- * @param  {number} max
+ * @param {number} min
+ * @param {number} max
  * @return {number}
  */
 const getRandom = function (min, max) {
@@ -112,11 +112,33 @@ const getResultScreen = function () {
   }
 };
 
+const answersCheckboxes = Array.from(genreLevelScreenElement.querySelectorAll(`.genre-answer input[type="checkbox"]`));
+const answer = genreLevelScreenElement.querySelector(`.genre-answer-send`);
+
 const answerHandler = function () {
   renderScreen(getResultScreen());
+  answersCheckboxes.forEach((checkbox) => {
+    checkbox.checked = false;
+    answer.disabled = true;
+  });
 };
 
-const answer = genreLevelScreenElement.querySelector(`.genre-answer-send`);
+/**
+ * @param {Event} evt
+ */
+const checkAnswersHandler = function (evt) {
+  if (evt.target.checked || document.querySelectorAll(`.genre-answer input:checked`).length) {
+    answer.disabled = false;
+  } else {
+    answer.disabled = true;
+  }
+};
+
 addClickEvent(answer, answerHandler);
+answersCheckboxes.forEach(
+    (checkbox) => {
+      checkbox.addEventListener(`change`, checkAnswersHandler);
+    }
+);
 
 export default genreLevelScreenElement;
