@@ -1,6 +1,7 @@
 import {expect} from 'chai';
 
-import {getRandom, getScore, getGameResult, getDeclensionWord} from './result.js';
+import {getRandom, getDeclensionWord} from './utils.js';
+import {getScore, getGameResult} from './result.js';
 
 describe(`result`, () => {
   describe(`getScore`, () => {

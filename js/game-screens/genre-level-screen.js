@@ -1,5 +1,5 @@
 import {getElementFromTemplate, addClickEvent} from '../helpers/elements.js';
-import {getRandom} from '../helpers/result.js';
+import {getRandom} from '../helpers/utils.js';
 import {renderScreen} from '../helpers/screens.js';
 import SuccessResultELement from './success-result-screen.js';
 import TimeOverResultELement from './time-over-result-screen.js';
