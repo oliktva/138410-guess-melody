@@ -19,9 +19,9 @@ export const getScore = function (answers) {
   return answers.reduce((score, answer) => {
     if (answer.result) {
       return answer.time < 30 ? score + 2 : score + 1;
-    } else {
-      return score - 2;
     }
+
+    return score - 2;
   }, 0);
 };
 
