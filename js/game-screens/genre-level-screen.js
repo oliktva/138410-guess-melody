@@ -1,5 +1,6 @@
-import {getElementFromTemplate, addClickEvent} from '../helpers/elements-helper.js';
-import {renderScreen} from '../helpers/screens-helper.js';
+import {getElementFromTemplate, addClickEvent} from '../helpers/elements.js';
+import {getRandom} from '../helpers/utils.js';
+import {renderScreen} from '../helpers/screens.js';
 import SuccessResultELement from './success-result-screen.js';
 import TimeOverResultELement from './time-over-result-screen.js';
 import AttemptsEndeedResultELement from './attempts-ended-result-screen.js';
@@ -88,15 +89,6 @@ const genreLevelScreenElement = getElementFromTemplate(
       </div>
     </section>`
 );
-
-/**
- * @param {number} min
- * @param {number} max
- * @return {number}
- */
-const getRandom = function (min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-};
 
 /**
  * @return {Element}

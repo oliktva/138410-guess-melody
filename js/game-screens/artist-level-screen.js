@@ -1,5 +1,5 @@
-import {getElementFromTemplate, addClickEvent} from '../helpers/elements-helper.js';
-import {renderScreen} from '../helpers/screens-helper.js';
+import {getElementFromTemplate, addClickEvent} from '../helpers/elements.js';
+import {renderScreen} from '../helpers/screens.js';
 import genreLevelScreenElement from './genre-level-screen.js';
 
 const artistLevelScreenElement = getElementFromTemplate(
