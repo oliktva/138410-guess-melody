@@ -1,17 +1,30 @@
 import {getDeclensionWord} from './utils.js';
 
+/** @enum {number} */
+export const GameLimit = {
+  ANSWERS_VALUE: 10,
+  FAST_ANSWER_TIME: 30
+};
+
+/** @enum {string} */
+export const GameResult = {
+  SUCCESS: `Вы заняли {i}-ое место из {n} {gamers}. Это лучше, чем у {p}% игроков`,
+  ATTEMPTS_ENDED: `У вас закончились все попытки. Ничего, повезёт в следующий раз!`,
+  TIME_OVER: `Время вышло! Вы не успели отгадать все мелодии`
+};
+
 /**
  * @param {Array} answers
  * @return {number}
  */
 export const getScore = function (answers) {
-  if (answers.length < 10) {
+  if (answers.length < GameLimit.ANSWERS_VALUE) {
     return -1;
   }
 
   return answers.reduce((score, answer) => {
     if (answer.result) {
-      return answer.time < 30 ? score + 2 : score + 1;
+      return answer.time < GameLimit.FAST_ANSWER_TIME ? score + 2 : score + 1;
     }
 
     return score - 2;
@@ -26,10 +39,10 @@ export const getScore = function (answers) {
 export const getGameResult = function (otherScores = [], ownResult) {
   if (ownResult.score === -1) {
     if (!ownResult.time) {
-      return `Время вышло! Вы не успели отгадать все мелодии`;
+      return GameResult.TIME_OVER;
     }
     if (!ownResult.lives) {
-      return `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
+      return GameResult.ATTEMPTS_ENDED;
     }
   }
 
@@ -40,8 +53,12 @@ export const getGameResult = function (otherScores = [], ownResult) {
   const position = scores.indexOf(ownResult.score);
   const place = scores.length - position;
   const percent = (position / scores.length) * 100;
+  const gamers = getDeclensionWord(
+      scores.length, {one: `игрока`, few: `игрока`, many: `игроков`, other: `игроков`}
+  );
 
-  const gamers = getDeclensionWord(scores.length, {one: `игрока`, few: `игрока`, many: `игроков`, other: `игроков`});
-
-  return `Вы заняли ${place}-ое место из ${scores.length} ${gamers}. Это лучше, чем у ${Math.round(percent)}% игроков`;
+  return GameResult.SUCCESS.replace(`{i}`, place)
+      .replace(`{n}`, scores.length)
+      .replace(`{gamers}`, gamers)
+      .replace(`{p}`, percent);
 };
