@@ -3,6 +3,13 @@ import {expect} from 'chai';
 import Timer from './timer.js';
 
 describe(`timer`, () => {
+  it(`should throw error`, () => {
+    const message = `Time should be a positive number`;
+
+    expect(() => new Timer()).to.throw(message);
+    expect(() => new Timer(-5)).to.throw(message);
+  });
+
   it(`should return a timer`, () => {
     const timer = new Timer(5);
     expect(timer.remainingTime).to.equal(5);
