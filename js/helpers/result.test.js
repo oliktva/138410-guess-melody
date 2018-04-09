@@ -14,15 +14,21 @@ describe(`result`, () => {
       }
     });
 
-    it(`should return -1 when the answers value < 10`, () => {
+    it(`should return -1 when the answers value < 10 or false answers have length 3`, () => {
       const expected = -1;
       const actual1 = getScore([]);
       const actual2 = getScore(scoreData.slice(0, 3));
       const actual3 = getScore(scoreData.slice(0, 9));
 
+      scoreData[3].result = false;
+      scoreData[5].result = false;
+      scoreData[9].result = false;
+      const actual4 = getScore(scoreData);
+
       expect(actual1).to.equal(expected);
       expect(actual2).to.equal(expected);
       expect(actual3).to.equal(expected);
+      expect(actual4).to.equal(expected);
     });
 
     it(`should return 20 when the answers are true and fast`, () => {
@@ -62,13 +68,8 @@ describe(`result`, () => {
       const expected2 = 11;
       const actual2 = getScore(scoreData);
 
-      scoreData[9].result = false;
-      const expected3 = 8;
-      const actual3 = getScore(scoreData);
-
       expect(actual1).to.equal(expected1);
       expect(actual2).to.equal(expected2);
-      expect(actual3).to.equal(expected3);
     });
   });
 
@@ -138,47 +139,47 @@ describe(`result`, () => {
       expect(actual3).to.equal(`игроков`);
       expect(actual4).to.equal(`игроков`);
     });
-  });
 
-  it(`should return one and other versions`, () => {
-    const data = {one: `игрока`, other: `игроков`};
+    it(`should return one and other versions`, () => {
+      const data = {one: `игрока`, other: `игроков`};
 
-    const actual1 = getDeclensionWord(1, data);
-    const actual2 = getDeclensionWord(3, data);
-    const actual3 = getDeclensionWord(16, data);
-    const actual4 = getDeclensionWord(107, data);
+      const actual1 = getDeclensionWord(1, data);
+      const actual2 = getDeclensionWord(3, data);
+      const actual3 = getDeclensionWord(16, data);
+      const actual4 = getDeclensionWord(107, data);
 
-    expect(actual1).to.equal(`игрока`);
-    expect(actual2).to.equal(`игроков`);
-    expect(actual3).to.equal(`игроков`);
-    expect(actual4).to.equal(`игроков`);
-  });
+      expect(actual1).to.equal(`игрока`);
+      expect(actual2).to.equal(`игроков`);
+      expect(actual3).to.equal(`игроков`);
+      expect(actual4).to.equal(`игроков`);
+    });
 
-  it(`should return one, few and other versions`, () => {
-    const data = {one: `игрок`, few: `игрока`, other: `игроков`};
+    it(`should return one, few and other versions`, () => {
+      const data = {one: `игрок`, few: `игрока`, other: `игроков`};
 
-    const actual1 = getDeclensionWord(1, data);
-    const actual2 = getDeclensionWord(3, data);
-    const actual3 = getDeclensionWord(16, data);
-    const actual4 = getDeclensionWord(107, data);
+      const actual1 = getDeclensionWord(1, data);
+      const actual2 = getDeclensionWord(3, data);
+      const actual3 = getDeclensionWord(16, data);
+      const actual4 = getDeclensionWord(107, data);
 
-    expect(actual1).to.equal(`игрок`);
-    expect(actual2).to.equal(`игрока`);
-    expect(actual3).to.equal(`игроков`);
-    expect(actual4).to.equal(`игроков`);
-  });
+      expect(actual1).to.equal(`игрок`);
+      expect(actual2).to.equal(`игрока`);
+      expect(actual3).to.equal(`игроков`);
+      expect(actual4).to.equal(`игроков`);
+    });
 
-  it(`should return one, few, many and other versions`, () => {
-    const data = {one: `игрок`, few: `игрока`, many: `игроков`, other: `игрока`};
+    it(`should return one, few, many and other versions`, () => {
+      const data = {one: `игрок`, few: `игрока`, many: `игроков`, other: `игрока`};
 
-    const actual1 = getDeclensionWord(1, data);
-    const actual2 = getDeclensionWord(3, data);
-    const actual3 = getDeclensionWord(16, data);
-    const actual4 = getDeclensionWord(1.5, data);
+      const actual1 = getDeclensionWord(1, data);
+      const actual2 = getDeclensionWord(3, data);
+      const actual3 = getDeclensionWord(16, data);
+      const actual4 = getDeclensionWord(1.5, data);
 
-    expect(actual1).to.equal(`игрок`);
-    expect(actual2).to.equal(`игрока`);
-    expect(actual3).to.equal(`игроков`);
-    expect(actual4).to.equal(`игрока`);
+      expect(actual1).to.equal(`игрок`);
+      expect(actual2).to.equal(`игрока`);
+      expect(actual3).to.equal(`игроков`);
+      expect(actual4).to.equal(`игрока`);
+    });
   });
 });

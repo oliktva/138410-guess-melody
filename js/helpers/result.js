@@ -3,6 +3,7 @@ import {getDeclensionWord} from './utils.js';
 /** @enum {number} */
 export const GameLimit = {
   ANSWERS_VALUE: 10,
+  MAX_FALSE_ANSWERS_VALUE: 3,
   FAST_ANSWER_TIME: 30
 };
 
@@ -18,7 +19,9 @@ export const GameResult = {
  * @return {number}
  */
 export const getScore = function (answers) {
-  if (answers.length < GameLimit.ANSWERS_VALUE) {
+  let falseAnswers = answers.filter((answer) => !answer.result);
+
+  if (answers.length < GameLimit.ANSWERS_VALUE || falseAnswers.length === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
     return -1;
   }
 
