@@ -8,9 +8,9 @@ import {
 import {getRandom} from '../helpers/utils.js';
 import {renderScreen} from '../helpers/screens.js';
 
-import SuccessResultELement from './success-result-screen.js';
-import TimeOverResultELement from './time-over-result-screen.js';
-import AttemptsEndeedResultELement from './attempts-ended-result-screen.js';
+import successResultELement from './success-result-screen.js';
+import timeOverResultELement from './time-over-result-screen.js';
+import attemptsEndeedResultELement from './attempts-ended-result-screen.js';
 
 import {initialState} from '../game-data.js';
 
@@ -63,51 +63,56 @@ const getLevelTemplate = (state) => {
   );
 };
 
-const genreLevelScreenElement = getElementFromTemplate(getLevelTemplate(initialState));
-
 /**
  * @return {Element}
  */
 const getResultScreen = () => {
   switch (getRandom(0, 3)) {
     case 0:
-      return SuccessResultELement;
+      return successResultELement();
     case 1:
-      return TimeOverResultELement;
+      return timeOverResultELement();
     default:
-      return AttemptsEndeedResultELement;
+      return attemptsEndeedResultELement();
   }
-};
-
-const answersCheckboxes = Array.from(
-    genreLevelScreenElement.querySelectorAll(`.genre-answer input[type="checkbox"]`)
-);
-const answer = genreLevelScreenElement.querySelector(`.genre-answer-send`);
-
-const answerHandler = () => {
-  renderScreen(getResultScreen());
-  answersCheckboxes.forEach((checkbox) => {
-    checkbox.checked = false;
-    answer.disabled = true;
-  });
 };
 
 /**
  * @param {Event} evt
+ * @param {Element} form
  */
-const checkAnswersHandler = (evt) => {
-  if (evt.target.checked || document.querySelectorAll(`.genre-answer input:checked`).length) {
-    answer.disabled = false;
-  } else {
-    answer.disabled = true;
+const answerHandler = (evt, form) => {
+  evt.preventDefault();
+  renderScreen(getResultScreen());
+  form.reset();
+};
+
+/**
+ * @param {Event} evt
+ * @param {Element} answer
+ * @param {Element} form
+ */
+const checkAnswersHandler = (evt, answer, form) => {
+  const element = evt.target;
+
+  if (element.tagName.toLowerCase() === `input`) {
+    if (element.checked || form.querySelectorAll(`.genre-answer input:checked`).length) {
+      answer.disabled = false;
+    } else {
+      answer.disabled = true;
+    }
   }
 };
 
-addClickEvent(answer, answerHandler);
-answersCheckboxes.forEach(
-    (checkbox) => {
-      checkbox.addEventListener(`change`, checkAnswersHandler);
-    }
-);
+/** @return {Element} */
+const genreLevelScreenElement = () => {
+  let element = getElementFromTemplate(getLevelTemplate(initialState));
+  const answer = element.querySelector(`.genre-answer-send`);
+  const form = element.querySelector(`form.genre`);
+
+  form.addEventListener(`change`, (evt) => checkAnswersHandler(evt, answer, form));
+  addClickEvent(answer, (evt) => answerHandler(evt, form));
+  return element;
+};
 
 export default genreLevelScreenElement;

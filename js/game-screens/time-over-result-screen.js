@@ -21,13 +21,17 @@ const getLevelTemplate = () => {
   );
 };
 
-const timeOutResultScreenElement = getElementFromTemplate(getLevelTemplate());
-
 const replayHandler = () => {
-  renderScreen(welcomeScreenElement);
+  renderScreen(welcomeScreenElement());
 };
 
-const replayGame = timeOutResultScreenElement.querySelector(`.main-replay`);
-addClickEvent(replayGame, replayHandler);
+/** @return {Element} */
+const timeOutResultScreenElement = () => {
+  let element = getElementFromTemplate(getLevelTemplate());
+  const replayGame = element.querySelector(`.main-replay`);
+  addClickEvent(replayGame, replayHandler);
+
+  return element;
+};
 
 export default timeOutResultScreenElement;

@@ -21,13 +21,17 @@ const getLevelTemplate = () => {
   );
 };
 
-const attemptsEndedResultScreenElement = getElementFromTemplate(getLevelTemplate());
-
 const replayHandler = () => {
-  renderScreen(welcomeScreenElement);
+  renderScreen(welcomeScreenElement());
 };
 
-const replayGame = attemptsEndedResultScreenElement.querySelector(`.main-replay`);
-addClickEvent(replayGame, replayHandler);
+/** @return {Element} */
+const attemptsEndedResultScreenElement = () => {
+  let element = getElementFromTemplate(getLevelTemplate());
+  const replayGame = element.querySelector(`.main-replay`);
+  addClickEvent(replayGame, replayHandler);
+
+  return element;
+};
 
 export default attemptsEndedResultScreenElement;

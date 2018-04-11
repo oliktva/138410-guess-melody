@@ -1,6 +1,5 @@
 import {
   getElementFromTemplate,
-  addClickEvent,
   getErrorsTemplate,
   getTimerTemplate,
   getPlayerTemplate
@@ -60,14 +59,21 @@ const getScreenTemplate = (state) => {
   );
 };
 
-const artistLevelScreenElement = getElementFromTemplate(getScreenTemplate(initialState));
-
-const answerHandler = () => {
-  renderScreen(genreLevelScreenElement);
+/** @param {Event} evt */
+const answerHandler = (evt) => {
+  if (evt.target.tagName.toLowerCase() === `input`) {
+    evt.preventDefault();
+    renderScreen(genreLevelScreenElement());
+  }
 };
 
-Array.from(artistLevelScreenElement.querySelectorAll(`.main-answer`)).forEach(
-    (element) => addClickEvent(element, answerHandler)
-);
+/** @return {Element} */
+const artistLevelScreenElement = () => {
+  let element = getElementFromTemplate(getScreenTemplate(initialState));
+  const answerForm = element.querySelector(`form.main-list`);
+  answerForm.addEventListener(`change`, answerHandler);
+
+  return element;
+};
 
 export default artistLevelScreenElement;

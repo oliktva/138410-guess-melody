@@ -21,13 +21,17 @@ const getScreenTemplate = () => {
   );
 };
 
-const welcomeScreenElement = getElementFromTemplate(getScreenTemplate());
-
 const startGameHandler = () => {
-  renderScreen(artistLevelScreenElement);
+  renderScreen(artistLevelScreenElement());
 };
 
-const startGame = welcomeScreenElement.querySelector(`.main-play`);
-addClickEvent(startGame, startGameHandler);
+/** @return {Element} */
+const welcomeScreenElement = () => {
+  let element = getElementFromTemplate(getScreenTemplate());
+  const startGame = element.querySelector(`.main-play`);
+  addClickEvent(startGame, startGameHandler);
+
+  return element;
+};
 
 export default welcomeScreenElement;
