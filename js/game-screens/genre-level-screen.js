@@ -1,100 +1,75 @@
-import {getElementFromTemplate, addClickEvent} from '../helpers/elements.js';
+import {
+  getElementFromTemplate,
+  addClickEvent,
+  getErrorsTemplate,
+  getTimerTemplate,
+  getPlayerTemplate
+} from '../helpers/elements.js';
 import {getRandom} from '../helpers/utils.js';
 import {renderScreen} from '../helpers/screens.js';
+
 import SuccessResultELement from './success-result-screen.js';
 import TimeOverResultELement from './time-over-result-screen.js';
 import AttemptsEndeedResultELement from './attempts-ended-result-screen.js';
 
-const genreLevelScreenElement = getElementFromTemplate(
+import {initialState} from '../game-data.js';
+
+/** @constant {string} */
+const ACTION = `Ответить`;
+
+/**
+ * @param {object} answer
+ * @param {number} index
+ * @return {string}
+ */
+const getAnswerTemplate = (answer, index) => {
+  return (
+    `<div class="genre-answer">
+      ${getPlayerTemplate(answer.audio.src)}
+      <input type="checkbox" name="answer" value="answer-${index}" id="a-${index}">
+      <label class="genre-answer-check" for="a-${index}"></label>
+    </div>`
+  );
+};
+
+/**
+ * @param {Array} answers
+ * @return {string}
+ */
+const getAnswersTemplate = (answers) => {
+  return (
+    `<form class="genre">
+      ${answers.map((answer, index) => getAnswerTemplate(answer, index + 1)).join(``)}
+      <button class="genre-answer-send" type="submit" disabled>${ACTION}</button>
+    </form>`
+  );
+};
+
+/**
+ * @param {object} state
+ * @return {string}
+ */
+const getLevelTemplate = (state) => {
+  let {question, answers} = state.level2;
+  return (
     `<section class="main main--level main--level-genre">
-      <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
-        <circle
-          cx="390" cy="390" r="370"
-          class="timer-line"
-          style="filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"></circle>
-
-        <div class="timer-value" xmlns="http://www.w3.org/1999/xhtml">
-          <span class="timer-value-mins">05</span><!--
-          --><span class="timer-value-dots">:</span><!--
-          --><span class="timer-value-secs">00</span>
-        </div>
-      </svg>
-      <div class="main-mistakes">
-        <img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">
-        <img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">
-        <img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">
-      </div>
-
+      ${getTimerTemplate(state)}
+      ${getErrorsTemplate(state)}
       <div class="main-wrap">
-        <h2 class="title">Выберите инди-рок треки</h2>
-        <form class="genre">
-          <div class="genre-answer">
-            <div class="player-wrapper">
-              <div class="player">
-                <audio></audio>
-                <button class="player-control player-control--pause"></button>
-                <div class="player-track">
-                  <span class="player-status"></span>
-                </div>
-              </div>
-            </div>
-            <input type="checkbox" name="answer" value="answer-1" id="a-1">
-            <label class="genre-answer-check" for="a-1"></label>
-          </div>
-
-          <div class="genre-answer">
-            <div class="player-wrapper">
-              <div class="player">
-                <audio></audio>
-                <button class="player-control player-control--play"></button>
-                <div class="player-track">
-                  <span class="player-status"></span>
-                </div>
-              </div>
-            </div>
-            <input type="checkbox" name="answer" value="answer-1" id="a-2">
-            <label class="genre-answer-check" for="a-2"></label>
-          </div>
-
-          <div class="genre-answer">
-            <div class="player-wrapper">
-              <div class="player">
-                <audio></audio>
-                <button class="player-control player-control--play"></button>
-                <div class="player-track">
-                  <span class="player-status"></span>
-                </div>
-              </div>
-            </div>
-            <input type="checkbox" name="answer" value="answer-1" id="a-3">
-            <label class="genre-answer-check" for="a-3"></label>
-          </div>
-
-          <div class="genre-answer">
-            <div class="player-wrapper">
-              <div class="player">
-                <audio></audio>
-                <button class="player-control player-control--play"></button>
-                <div class="player-track">
-                  <span class="player-status"></span>
-                </div>
-              </div>
-            </div>
-            <input type="checkbox" name="answer" value="answer-1" id="a-4">
-            <label class="genre-answer-check" for="a-4"></label>
-          </div>
-
-          <button class="genre-answer-send" type="submit" disabled>Ответить</button>
-        </form>
+        <h2 class="title">${question.title}</h2>
+        ${getAnswersTemplate(answers)}
       </div>
     </section>`
-);
+  );
+};
+
+const genreLevelScreenElement = getElementFromTemplate(getLevelTemplate(initialState));
 
 /**
  * @return {Element}
  */
-const getResultScreen = function () {
-  switch (getRandom(0, 2)) {
+const getResultScreen = () => {
+  switch (getRandom(0, 3)) {
     case 0:
       return SuccessResultELement;
     case 1:
@@ -104,10 +79,12 @@ const getResultScreen = function () {
   }
 };
 
-const answersCheckboxes = Array.from(genreLevelScreenElement.querySelectorAll(`.genre-answer input[type="checkbox"]`));
+const answersCheckboxes = Array.from(
+    genreLevelScreenElement.querySelectorAll(`.genre-answer input[type="checkbox"]`)
+);
 const answer = genreLevelScreenElement.querySelector(`.genre-answer-send`);
 
-const answerHandler = function () {
+const answerHandler = () => {
   renderScreen(getResultScreen());
   answersCheckboxes.forEach((checkbox) => {
     checkbox.checked = false;
@@ -118,7 +95,7 @@ const answerHandler = function () {
 /**
  * @param {Event} evt
  */
-const checkAnswersHandler = function (evt) {
+const checkAnswersHandler = (evt) => {
   if (evt.target.checked || document.querySelectorAll(`.genre-answer input:checked`).length) {
     answer.disabled = false;
   } else {

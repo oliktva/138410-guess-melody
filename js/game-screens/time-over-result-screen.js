@@ -1,18 +1,29 @@
-import {getElementFromTemplate, addClickEvent} from '../helpers/elements.js';
+import {getElementFromTemplate, addClickEvent, getHeaderTemplate} from '../helpers/elements.js';
 import {renderScreen} from '../helpers/screens.js';
 import welcomeScreenElement from './welcome-screen.js';
 
-const timeOutResultScreenElement = getElementFromTemplate(
+/** @enum {string} */
+const Data = {
+  TITLE: `Увы и ах!`,
+  TEXT: `Время вышло!<br>Вы не успели отгадать все мелодии`,
+  ACTION: `Попробовать ещё раз`,
+};
+
+/** @return {string} */
+const getLevelTemplate = () => {
+  return (
     `<section class="main main--result">
-      <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
-
-      <h2 class="title">Увы и ах!</h2>
-      <div class="main-stat">Время вышло!<br>Вы не успели отгадать все мелодии</div>
-      <span role="button" tabindex="0" class="main-replay">Попробовать ещё раз</span>
+      ${getHeaderTemplate()}
+      <h2 class="title">${Data.TITLE}</h2>
+      <div class="main-stat">${Data.TEXT}</div>
+      <span role="button" tabindex="0" class="main-replay">${Data.ACTION}</span>
     </section>`
-);
+  );
+};
 
-const replayHandler = function () {
+const timeOutResultScreenElement = getElementFromTemplate(getLevelTemplate());
+
+const replayHandler = () => {
   renderScreen(welcomeScreenElement);
 };
 

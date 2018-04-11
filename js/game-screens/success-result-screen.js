@@ -1,21 +1,31 @@
-import {getElementFromTemplate, addClickEvent} from '../helpers/elements.js';
+import {getElementFromTemplate, addClickEvent, getHeaderTemplate} from '../helpers/elements.js';
 import {renderScreen} from '../helpers/screens.js';
 import welcomeScreenElement from './welcome-screen.js';
 
-const successResultScreenElement = getElementFromTemplate(
+/** @enum {string} */
+const Data = {
+  TITLE: `Вы настоящий меломан!`,
+  TEXT: `За&nbsp;3&nbsp;минуты и 25&nbsp;секунд<br>вы&nbsp;набрали 12 баллов (8 быстрых)<br>совершив 3 ошибки`,
+  RESULT: `Вы заняли 2 место из 10. Это&nbsp;лучше чем у&nbsp;80%&nbsp;игроков`,
+  ACTION: `Сыграть ещё раз`,
+};
+
+/** @return {string} */
+const getLevelTemplate = () => {
+  return (
     `<section class="main main--result">
-      <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
-
-      <h2 class="title">Вы настоящий меломан!</h2>
-      <div class="main-stat">За&nbsp;3&nbsp;минуты и 25&nbsp;секунд
-        <br>вы&nbsp;набрали 12 баллов (8 быстрых)
-        <br>совершив 3 ошибки</div>
-      <span class="main-comparison">Вы заняли 2 место из 10. Это&nbsp;лучше чем у&nbsp;80%&nbsp;игроков</span>
-      <span role="button" tabindex="0" class="main-replay">Сыграть ещё раз</span>
+      ${getHeaderTemplate()}
+      <h2 class="title">${Data.TITLE}</h2>
+      <div class="main-stat">${Data.TEXT}</div>
+      <span class="main-comparison">${Data.RESULT}</span>
+      <span role="button" tabindex="0" class="main-replay">${Data.ACTION}</span>
     </section>`
-);
+  );
+};
 
-const replayHandler = function () {
+const successResultScreenElement = getElementFromTemplate(getLevelTemplate());
+
+const replayHandler = () => {
   renderScreen(welcomeScreenElement);
 };
 

@@ -1,21 +1,29 @@
-import {getElementFromTemplate, addClickEvent} from '../helpers/elements.js';
+import {getElementFromTemplate, addClickEvent, getHeaderTemplate} from '../helpers/elements.js';
 import {renderScreen} from '../helpers/screens.js';
 import artistLevelScreenElement from './artist-level-screen.js';
 
-const welcomeScreenElement = getElementFromTemplate(
-    `<section class="main main--welcome">
-      <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
-      <button class="main-play">Начать игру</button>
-      <h2 class="title main-title">Правила игры</h2>
-      <p class="text main-text">
-        Правила просты&nbsp;— за&nbsp;5 минут ответить на&nbsp;все вопросы.<br>
-        Ошибиться можно 3 раза.<br>
-        Удачи!
-      </p>
-    </section>`
-);
+/** @enum {string} */
+const Data = {
+  TITLE: `Правила игры`,
+  TEXT: `Правила просты&nbsp;— за&nbsp;5 минут ответить на&nbsp;все вопросы.<br>Ошибиться можно 3 раза.<br>Удачи!`,
+  ACTION: `Начать игру`
+};
 
-const startGameHandler = function () {
+/** @return {string} */
+const getScreenTemplate = () => {
+  return (
+    `<section class="main main--welcome">
+      ${getHeaderTemplate()}
+      <button class="main-play">${Data.ACTION}</button>
+      <h2 class="title main-title">${Data.TITLE}</h2>
+      <p class="text main-text">${Data.TEXT}</p>
+    </section>`
+  );
+};
+
+const welcomeScreenElement = getElementFromTemplate(getScreenTemplate());
+
+const startGameHandler = () => {
   renderScreen(artistLevelScreenElement);
 };
 

@@ -18,7 +18,7 @@ export const GameResult = {
  * @param {Array} answers
  * @return {number}
  */
-export const getScore = function (answers) {
+export const getScore = (answers) => {
   let falseAnswers = answers.filter((answer) => !answer.result);
 
   if (answers.length < GameLimit.ANSWERS_VALUE || falseAnswers.length === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
@@ -39,7 +39,7 @@ export const getScore = function (answers) {
  * @param {object} ownResult
  * @return {string}
  */
-export const getGameResult = function (otherScores = [], ownResult) {
+export const getGameResult = (otherScores = [], ownResult) => {
   if (ownResult.score === -1) {
     if (!ownResult.time) {
       return GameResult.TIME_OVER;
