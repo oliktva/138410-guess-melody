@@ -9,14 +9,26 @@ import {
   getGenreAnswerTemplate
 } from '../helpers/templates.js';
 
-import successResultELement from './success-result-screen.js';
-import timeOverResultELement from './time-over-result-screen.js';
-import attemptsEndeedResultELement from './attempts-ended-result-screen.js';
+import resultScreenElement from './result-screen.js';
 
 import {state, ARTIST, GENRE} from '../game-data.js';
 
 /** @constant {string} */
 const ACTION = `Ответить`;
+
+const checkAnswer = (answersIndex) => {
+  const {levels: {current, resources}} = state;
+
+  let isCorrect = answersIndex.reduce((result, answerIndex) => {
+    return result && resources[current].answers[answerIndex - 1].correct;
+  }, true);
+
+  state.results.push({result: isCorrect, time: getRandom(0, 30)});
+
+  if (!isCorrect) {
+    state.errors++;
+  }
+};
 
 /**
  * @param  {object} answer
@@ -94,16 +106,15 @@ const checkAnswersHandler = (evt, answer, form) => {
 };
 
 /**
+ * @param  {Boolean} isLastLevel
  * @return {Element}
  */
-const getResultScreen = () => {
-  switch (getRandom(0, 3)) {
-    case 0:
-      return successResultELement();
-    case 1:
-      return timeOverResultELement();
-    default:
-      return attemptsEndeedResultELement();
+const getNextScreenElement = (isLastLevel) => {
+  if (isLastLevel) {
+    return resultScreenElement();
+  } else {
+    state.levels.current++;
+    return levelScreenElement();
   }
 };
 
@@ -111,31 +122,27 @@ const getResultScreen = () => {
  * @param {Event} evt
  * @param {Element} form
  * @param {Boolean} isLastLevel
+ * @param {function} cb
  */
-const genreAnswerHandler = (evt, form, isLastLevel) => {
+const genreAnswerHandler = (evt, form, isLastLevel, cb = () => {}) => {
   evt.preventDefault();
-  if (isLastLevel) {
-    renderScreen(getResultScreen());
-  } else {
-    state.levels.current++;
-    renderScreen(levelScreenElement());
-  }
+  const answers = Array.from(document.querySelectorAll(`.genre-answer input:checked`));
+  cb(answers.map((answer) => answer.value.substr(-1)));
+  renderScreen(getNextScreenElement(isLastLevel));
   form.reset();
 };
 
 /**
  * @param  {Event}  evt
  * @param  {Boolean} isLastLevel
+ * @param {function} cb
  */
-const artistAnswerHandler = (evt, isLastLevel) => {
-  if (evt.target.tagName.toLowerCase() === `input`) {
+const artistAnswerHandler = (evt, isLastLevel, cb = () => {}) => {
+  const answer = evt.target;
+  if (answer.tagName.toLowerCase() === `input`) {
+    cb([answer.value.substr(-1)]);
     evt.preventDefault();
-    if (isLastLevel) {
-      renderScreen(getResultScreen());
-    } else {
-      state.levels.current++;
-      renderScreen(levelScreenElement());
-    }
+    renderScreen(getNextScreenElement(isLastLevel));
   }
 };
 
@@ -152,7 +159,7 @@ const levelScreenElement = () => {
 
   if (level.type === ARTIST) {
     const answerForm = element.querySelector(`form.main-list`);
-    answerForm.addEventListener(`change`, (evt) => artistAnswerHandler(evt, isLastLevel));
+    answerForm.addEventListener(`change`, (evt) => artistAnswerHandler(evt, isLastLevel, checkAnswer));
   }
 
   if (level.type === GENRE) {
@@ -160,7 +167,7 @@ const levelScreenElement = () => {
     const answer = element.querySelector(`.genre-answer-send`);
 
     answerForm.addEventListener(`change`, (evt) => checkAnswersHandler(evt, answer, answerForm));
-    answer.addEventListener(`click`, (answer, (evt) => genreAnswerHandler(evt, answerForm, isLastLevel)));
+    answer.addEventListener(`click`, (answer, (evt) => genreAnswerHandler(evt, answerForm, isLastLevel, checkAnswer)));
   }
 
   return element;

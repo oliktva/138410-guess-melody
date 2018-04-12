@@ -1,23 +1,28 @@
 import {getElementFromTemplate, addClickEvent} from '../helpers/elements.js';
 import {getHeaderTemplate} from '../helpers/templates.js';
 import {renderScreen} from '../helpers/screens.js';
+import {getScore, getGameResult} from '../helpers/result.js';
 import welcomeScreenElement from './welcome-screen.js';
 
-/** @enum {string} */
-const Data = {
-  TITLE: `Увы и ах!`,
-  TEXT: `Время вышло!<br>Вы не успели отгадать все мелодии`,
-  ACTION: `Попробовать ещё раз`,
-};
+import {state} from '../game-data.js';
 
 /** @return {string} */
 const getLevelTemplate = () => {
+  const result = {
+    score: getScore(state.results),
+    errors: state.errors
+  };
+
+  let data = getGameResult(result, state.allResults);
+  state.allResults.push(result.score);
+
   return (
     `<section class="main main--result">
       ${getHeaderTemplate()}
-      <h2 class="title">${Data.TITLE}</h2>
-      <div class="main-stat">${Data.TEXT}</div>
-      <span role="button" tabindex="0" class="main-replay">${Data.ACTION}</span>
+      <h2 class="title">${data.title}</h2>
+      <div class="main-stat">${data.text}</div>
+      ${data.comparison ? `<span class="main-comparison">${data.comparison}</span>` : ``}
+      <span role="button" tabindex="0" class="main-replay">${data.action}</span>
     </section>`
   );
 };
@@ -27,7 +32,7 @@ const replayHandler = () => {
 };
 
 /** @return {Element} */
-const timeOutResultScreenElement = () => {
+const resultScreenElement = () => {
   let element = getElementFromTemplate(getLevelTemplate());
   const replayGame = element.querySelector(`.main-replay`);
   addClickEvent(replayGame, replayHandler);
@@ -35,4 +40,4 @@ const timeOutResultScreenElement = () => {
   return element;
 };
 
-export default timeOutResultScreenElement;
+export default resultScreenElement;

@@ -76,47 +76,44 @@ describe(`result`, () => {
   describe(`getGameResult`, () => {
     const otherResultsData = [13, 17, 16, 19, 11, 15, 15, 1, 3];
     let score;
-    let lives;
-    let time;
+    let errors;
 
-    const successResult = `Вы заняли i-ое место из t игроков. Это лучше, чем у n% игроков`;
-    const timeOverResult = `Время вышло! Вы не успели отгадать все мелодии`;
-    const attemptsEndedResult = `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
+    const successResult = `Вы&nbsp;заняли {i}-ое место из&nbsp;{g}&nbsp;игроков.<br>Это лучше, чем у&nbsp;{p}% игроков`;
+    const timeOverResult = `Время вышло!<br>Вы&nbsp;не&nbsp;успели отгадать все мелодии`;
+    const attemptsEndedResult = `У&nbsp;вас закончились все попытки.<br>Ничего, повезёт в&nbsp;следующий раз!`;
 
     beforeEach(() => {
       score = 20;
-      lives = 3;
-      time = 30;
+      errors = 1;
     });
 
     it(`should return timeOverResult when the own result equals -1 and time equals 0`, () => {
       score = -1;
-      time = 0;
 
-      const actual = getGameResult(otherResultsData, {score, lives, time});
+      const actual = getGameResult({score, errors}, otherResultsData).text;
 
       expect(actual).to.equal(timeOverResult);
     });
 
     it(`should return attemptsEndedResult when the own result equals -1 and lives equal 0`, () => {
       score = -1;
-      lives = 0;
+      errors = 3;
 
-      const actual = getGameResult(otherResultsData, {score, lives, time});
+      const actual = getGameResult({score, errors}, otherResultsData).text;
 
       expect(actual).to.equal(attemptsEndedResult);
     });
 
     it(`should return successResult when the own result is success`, () => {
-      const expected1 = successResult.replace(`i`, 1).replace(`t`, 10).replace(`n`, 90);
-      const expected2 = successResult.replace(`i`, 8).replace(`t`, 10).replace(`n`, 20);
-      const expected3 = successResult.replace(`i`, 2).replace(`t`, 10).replace(`n`, 80);
-      const expected4 = successResult.replace(`i`, 1).replace(`t игроков`, `1 игрока`).replace(`n`, 0);
+      const expected1 = successResult.replace(`{i}`, 1).replace(`{g}`, 10).replace(`{p}`, 90);
+      const expected2 = successResult.replace(`{i}`, 8).replace(`{g}`, 10).replace(`{p}`, 20);
+      const expected3 = successResult.replace(`{i}`, 2).replace(`{g}`, 10).replace(`{p}`, 80);
+      const expected4 = successResult.replace(`{i}`, 1).replace(`{g}&nbsp;игроков`, `1&nbsp;игрока`).replace(`{p}`, 0);
 
-      const actual1 = getGameResult(otherResultsData, {score, lives, time});
-      const actual2 = getGameResult(otherResultsData, {score: 9, lives, time});
-      const actual3 = getGameResult(otherResultsData, {score: 18, lives, time});
-      const actual4 = getGameResult([], {score: 18, lives, time});
+      const actual1 = getGameResult({score, errors}, otherResultsData).text;
+      const actual2 = getGameResult({score: 9, errors}, otherResultsData).text;
+      const actual3 = getGameResult({score: 18, errors}, otherResultsData).text;
+      const actual4 = getGameResult({score: 18, errors}, []).text;
 
       expect(actual1).to.equal(expected1);
       expect(actual2).to.equal(expected2);

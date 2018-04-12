@@ -53,6 +53,8 @@ const initialState = {
     seconds: `00`
   },
   errors: 0,
+  results: [],
+  allResults: [],
   levels: {
     current: 0,
     resources: [{
