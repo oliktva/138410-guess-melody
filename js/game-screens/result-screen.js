@@ -28,6 +28,9 @@ const getLevelTemplate = () => {
 };
 
 const replayHandler = () => {
+  state.errors = 0;
+  state.levels.current = 0;
+  state.results = [];
   renderScreen(welcomeScreenElement());
 };
 

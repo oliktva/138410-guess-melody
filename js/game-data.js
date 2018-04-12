@@ -47,6 +47,53 @@ const audio = [
   }
 ];
 
+const artist = {
+  type: ARTIST,
+  question: {
+    title: `Кто исполняет эту песню?`,
+    audio: audio[0]
+  },
+  answers: [{
+    artist: `Nick Finzer`,
+    avatar: `http://placehold.it/134x134`,
+    correct: false
+  }, {
+    artist: `Joshua Redman`,
+    avatar: `http://placehold.it/134x134`,
+    correct: false
+  }, {
+    artist: `Kevin MacLeod`,
+    avatar: `http://placehold.it/134x134`,
+    correct: true
+  }]
+};
+
+const genre = {
+  type: GENRE,
+  question: {
+    title: `Выберите инди-рок треки`
+  },
+  answers: [{
+    audio: audio[1],
+    correct: true
+  }, {
+    audio: audio[2],
+    correct: true
+  }, {
+    audio: audio[3],
+    correct: false
+  }, {
+    audio: audio[4],
+    correct: false
+  }]
+};
+
+const resources = [];
+for (let i = 0; i < 5; i++) {
+  resources.push(artist);
+  resources.push(genre);
+}
+
 const initialState = {
   remainingTime: {
     minutes: `5`,
@@ -57,45 +104,8 @@ const initialState = {
   allResults: [],
   levels: {
     current: 0,
-    resources: [{
-      type: ARTIST,
-      question: {
-        title: `Кто исполняет эту песню?`,
-        audio: audio[0]
-      },
-      answers: [{
-        artist: `Nick Finzer`,
-        avatar: `http://placehold.it/134x134`,
-        correct: false
-      }, {
-        artist: `Joshua Redman`,
-        avatar: `http://placehold.it/134x134`,
-        correct: false
-      }, {
-        artist: `Kevin MacLeod`,
-        avatar: `http://placehold.it/134x134`,
-        correct: true
-      }]
-    }, {
-      type: GENRE,
-      question: {
-        title: `Выберите инди-рок треки`
-      },
-      answers: [{
-        audio: audio[1],
-        correct: false
-      }, {
-        audio: audio[2],
-        correct: false
-      }, {
-        audio: audio[3],
-        correct: false
-      }, {
-        audio: audio[4],
-        correct: false
-      }]
-    }]
+    resources
   }
 };
 
-export let state = Object.assign(initialState);
+export const state = Object.assign(initialState);

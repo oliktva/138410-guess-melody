@@ -42,13 +42,15 @@ export const getErrorsTemplate = (errors) => {
 
 /**
  * @param {string} audioSrc
+ * @param {Boolean} autoplay
  * @return {string}
  */
-export const getPlayerTemplate = (audioSrc) => {
+export const getPlayerTemplate = (audioSrc, autoplay = false) => {
+  let autoplayAttr = autoplay ? `autoplay` : ``;
   return (
     `<div class="player-wrapper">
       <div class="player">
-        <audio src="${audioSrc}"></audio>
+        <audio src="${audioSrc}" ${autoplayAttr}></audio>
         <button class="player-control player-control--pause"></button>
         <div class="player-track">
           <span class="player-status"></span>

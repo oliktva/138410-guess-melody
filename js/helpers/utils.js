@@ -19,7 +19,7 @@ export const getRandom = (min, max) => {
 
 /**
  * @param {number} count
- * @return {boolean}
+ * @return {Boolean}
  */
 const isMany = (count) => {
   return count >= DeclensionRule.MANY_MIN && count <= DeclensionRule.MANY_MAX || count % 10 === DeclensionRule.ZERO;
@@ -27,7 +27,7 @@ const isMany = (count) => {
 
 /**
  * @param {number} count
- * @return {boolean}
+ * @return {Boolean}
  */
 const isFew = (count) => {
   return count % 10 >= DeclensionRule.FEW_MIN && count % 10 <= DeclensionRule.FEW_MAX;

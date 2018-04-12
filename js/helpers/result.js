@@ -69,7 +69,7 @@ export const getGameResult = (ownResult, otherScores = []) => {
 
   const position = scores.indexOf(ownResult.score);
   const place = scores.length - position;
-  const percent = (position / scores.length) * 100;
+  const percent = Math.floor((position / scores.length) * 100);
   const gamers = getDeclensionWord(
       scores.length, {one: `игрока`, few: `игрока`, many: `игроков`, other: `игроков`}
   );

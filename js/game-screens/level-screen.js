@@ -81,7 +81,7 @@ const getScreenTemplate = (remainingTime, errors, level) => {
       ${getErrorsTemplate(errors)}
       <div class="main-wrap">
         <h2 class="title main-title">${title}</h2>
-        ${type === ARTIST ? getPlayerTemplate(audio.src) : ``}
+        ${type === ARTIST ? getPlayerTemplate(audio.src, true) : ``}
         ${getAnswersTemplate(answers, type)}
       </div>
     </section>`
