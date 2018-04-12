@@ -1,10 +1,10 @@
+import {getElementFromTemplate} from '../helpers/elements.js';
+import {renderScreen} from '../helpers/screens.js';
 import {
-  getElementFromTemplate,
   getErrorsTemplate,
   getTimerTemplate,
   getPlayerTemplate
-} from '../helpers/elements.js';
-import {renderScreen} from '../helpers/screens.js';
+} from '../helpers/templates.js';
 
 import genreLevelScreenElement from './genre-level-screen.js';
 

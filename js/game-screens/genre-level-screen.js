@@ -1,12 +1,11 @@
+import {getElementFromTemplate, addClickEvent} from '../helpers/elements.js';
+import {getRandom} from '../helpers/utils.js';
+import {renderScreen} from '../helpers/screens.js';
 import {
-  getElementFromTemplate,
-  addClickEvent,
   getErrorsTemplate,
   getTimerTemplate,
   getPlayerTemplate
-} from '../helpers/elements.js';
-import {getRandom} from '../helpers/utils.js';
-import {renderScreen} from '../helpers/screens.js';
+} from '../helpers/templates.js';
 
 import successResultELement from './success-result-screen.js';
 import timeOverResultELement from './time-over-result-screen.js';

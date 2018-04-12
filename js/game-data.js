@@ -1,3 +1,7 @@
+/** @constant {string} */
+export const ARTIST = `artist`;
+export const GENRE = `genre`;
+
 const audio = [
   {
     artist: `Kevin MacLeod`,
@@ -43,44 +47,53 @@ const audio = [
   }
 ];
 
-export let initialState = {
+const initialState = {
   remainingTime: {
     minutes: `5`,
     seconds: `00`
   },
   errors: 0,
-  level1: {
-    question: {
-      title: `Кто исполняет эту песню?`,
-      audio: audio[0]
-    },
-    answers: [{
-      artist: `Пелагея`,
-      avatar: `http://placehold.it/134x134`
+  levels: {
+    current: 0,
+    resources: [{
+      type: ARTIST,
+      question: {
+        title: `Кто исполняет эту песню?`,
+        audio: audio[0]
+      },
+      answers: [{
+        artist: `Nick Finzer`,
+        avatar: `http://placehold.it/134x134`,
+        correct: false
+      }, {
+        artist: `Joshua Redman`,
+        avatar: `http://placehold.it/134x134`,
+        correct: false
+      }, {
+        artist: `Kevin MacLeod`,
+        avatar: `http://placehold.it/134x134`,
+        correct: true
+      }]
     }, {
-      artist: `Краснознаменная дивизия имени моей бабушки`,
-      avatar: `http://placehold.it/134x134`
-    }, {
-      artist: `Lorde`,
-      avatar: `http://placehold.it/134x134`
-    }]
-  },
-  level2: {
-    question: {
-      title: `Выберите инди-рок треки`
-    },
-    answers: [{
-      artist: `Пелагея`,
-      audio: audio[1]
-    }, {
-      artist: `Краснознаменная дивизия имени моей бабушки`,
-      audio: audio[2]
-    }, {
-      artist: `Lorde`,
-      audio: audio[3],
-    }, {
-      artist: `Lorde`,
-      audio: audio[4],
+      type: GENRE,
+      question: {
+        title: `Выберите инди-рок треки`
+      },
+      answers: [{
+        audio: audio[1],
+        correct: false
+      }, {
+        audio: audio[2],
+        correct: false
+      }, {
+        audio: audio[3],
+        correct: false
+      }, {
+        audio: audio[4],
+        correct: false
+      }]
     }]
   }
 };
+
+export let state = Object.assign(initialState);

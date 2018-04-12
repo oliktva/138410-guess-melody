@@ -1,6 +1,8 @@
-import {getElementFromTemplate, addClickEvent, getHeaderTemplate} from '../helpers/elements.js';
+import {getElementFromTemplate, addClickEvent} from '../helpers/elements.js';
+import {getHeaderTemplate} from '../helpers/templates.js';
 import {renderScreen} from '../helpers/screens.js';
-import artistLevelScreenElement from './artist-level-screen.js';
+
+import levelScreenElement from './level-screen.js';
 
 /** @enum {string} */
 const Data = {
@@ -22,7 +24,7 @@ const getScreenTemplate = () => {
 };
 
 const startGameHandler = () => {
-  renderScreen(artistLevelScreenElement());
+  renderScreen(levelScreenElement());
 };
 
 /** @return {Element} */

@@ -1,4 +1,5 @@
-import {getElementFromTemplate, addClickEvent, getHeaderTemplate} from '../helpers/elements.js';
+import {getElementFromTemplate, addClickEvent} from '../helpers/elements.js';
+import {getHeaderTemplate} from '../helpers/templates.js';
 import {renderScreen} from '../helpers/screens.js';
 import welcomeScreenElement from './welcome-screen.js';
 
