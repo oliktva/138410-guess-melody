@@ -20,18 +20,19 @@ const ACTION = `Ответить`;
 const checkAnswer = (answersIndeces) => {
   const {levels: {current, resources}} = state;
   const currentAnswers = resources[current].answers;
-  const correctAnswers = currentAnswers.filter((answer) => answer.correct);
   let isCorrect = false;
 
-  if (answersIndeces.length === correctAnswers.length) {
-    isCorrect = answersIndeces.reduce((result, answerIndex) => {
-      return result && currentAnswers[answerIndex - 1].correct;
-    }, true);
-  }
+  isCorrect = currentAnswers.reduce((result, answer, index) => {
+    if (answer.correct) {
+      return result && answersIndeces.includes(index);
+    } else {
+      return result && !answersIndeces.includes(index);
+    }
+  }, true);
 
-  state.results.push({result: isCorrect, time: getRandom(0, 30)});
-
-  if (!isCorrect) {
+  if (isCorrect) {
+    state.results.push({result: isCorrect, time: getRandom(0, 30)});
+  } else {
     state.errors++;
   }
 };
@@ -133,7 +134,7 @@ const getNextScreenElement = (isLastLevel) => {
 const genreAnswerHandler = (evt, form, isLastLevel, cb = () => {}) => {
   evt.preventDefault();
   const answers = Array.from(document.querySelectorAll(`.genre-answer input:checked`));
-  cb(answers.map((answer) => answer.value.substr(-1)));
+  cb(answers.map((answer) => answer.value.substr(-1) - 1));
   renderScreen(getNextScreenElement(isLastLevel));
   form.reset();
 };
@@ -146,7 +147,7 @@ const genreAnswerHandler = (evt, form, isLastLevel, cb = () => {}) => {
 const artistAnswerHandler = (evt, isLastLevel, cb = () => {}) => {
   const answer = evt.target;
   if (answer.tagName.toLowerCase() === `input`) {
-    cb([answer.value.substr(-1)]);
+    cb([answer.value.substr(-1) - 1]);
     evt.preventDefault();
     renderScreen(getNextScreenElement(isLastLevel));
   }
