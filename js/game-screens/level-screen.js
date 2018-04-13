@@ -17,6 +17,9 @@ import {state, ARTIST, GENRE} from '../game-data.js';
 /** @constant {string} */
 const ACTION = `Ответить`;
 
+/**
+ * @param  {Array} answersIndeces
+ */
 const checkAnswer = (answersIndeces) => {
   const {levels: {current, resources}} = state;
   const currentAnswers = resources[current].answers;
