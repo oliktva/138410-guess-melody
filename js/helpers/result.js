@@ -3,22 +3,41 @@ import {getDeclensionWord} from './utils.js';
 /** @enum {number} */
 export const GameLimit = {
   ANSWERS_VALUE: 10,
+  MAX_FALSE_ANSWERS_VALUE: 3,
   FAST_ANSWER_TIME: 30
 };
 
-/** @enum {string} */
+const successTextTemplate = `Вы&nbsp;заняли {i}-ое место из&nbsp;{n}.<br>Это лучше, чем у&nbsp;{p}% игроков`;
+const successComparisonTemplate = `За&nbsp;{m} и {s}<br>вы&nbsp;набрали {p} ({f} быстрых)<br>совершив {e}`;
+
+/** @enum {object} */
 export const GameResult = {
-  SUCCESS: `Вы заняли {i}-ое место из {n} {gamers}. Это лучше, чем у {p}% игроков`,
-  ATTEMPTS_ENDED: `У вас закончились все попытки. Ничего, повезёт в следующий раз!`,
-  TIME_OVER: `Время вышло! Вы не успели отгадать все мелодии`
+  SUCCESS: {
+    title: `Вы настоящий меломан!`,
+    text: ``,
+    comparison: ``,
+    action: `Сыграть ещё раз`
+  },
+  ATTEMPTS_ENDED: {
+    title: `Какая жалость!`,
+    text: `У&nbsp;вас закончились все попытки.<br>Ничего, повезёт в&nbsp;следующий раз!`,
+    action: `Попробовать ещё раз`
+  },
+  TIME_OVER: {
+    title: `Какая жалость!`,
+    text: `Время вышло!<br>Вы&nbsp;не&nbsp;успели отгадать все мелодии`,
+    action: `Попробовать ещё раз`
+  }
 };
 
 /**
  * @param {Array} answers
  * @return {number}
  */
-export const getScore = function (answers) {
-  if (answers.length < GameLimit.ANSWERS_VALUE) {
+export const getScore = (answers) => {
+  let falseAnswers = answers.filter((answer) => !answer.result);
+
+  if (answers.length < GameLimit.ANSWERS_VALUE || falseAnswers.length === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
     return -1;
   }
 
@@ -32,18 +51,16 @@ export const getScore = function (answers) {
 };
 
 /**
- * @param {Array} otherScores
  * @param {object} ownResult
- * @return {string}
+ * @param {Array} otherScores
+ * @return {object}
  */
-export const getGameResult = function (otherScores = [], ownResult) {
+export const getGameResult = (ownResult, otherScores = []) => {
   if (ownResult.score === -1) {
-    if (!ownResult.time) {
-      return GameResult.TIME_OVER;
-    }
-    if (!ownResult.lives) {
+    if (ownResult.errors === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
       return GameResult.ATTEMPTS_ENDED;
     }
+    return GameResult.TIME_OVER;
   }
 
   let scores = otherScores.slice();
@@ -52,13 +69,33 @@ export const getGameResult = function (otherScores = [], ownResult) {
 
   const position = scores.indexOf(ownResult.score);
   const place = scores.length - position;
-  const percent = (position / scores.length) * 100;
+  const percent = Math.floor((position / scores.length) * 100);
   const gamers = getDeclensionWord(
       scores.length, {one: `игрока`, few: `игрока`, many: `игроков`, other: `игроков`}
   );
+  const minutes = getDeclensionWord(
+      3, {one: `минуту`, few: `минуты`, many: `минут`, other: `минуты`}
+  );
+  const seconds = getDeclensionWord(
+      1, {one: `секунду`, few: `секунды`, many: `секунд`, other: `секунды`}
+  );
+  const points = getDeclensionWord(
+      ownResult.score, {one: `балл`, few: `балла`, many: `баллов`, other: `балла`}
+  );
+  const errors = getDeclensionWord(
+      2, {one: `ошибку`, few: `ошибки`, many: `ошибок`, other: `ошибки`}
+  );
 
-  return GameResult.SUCCESS.replace(`{i}`, place)
-      .replace(`{n}`, scores.length)
-      .replace(`{gamers}`, gamers)
+  GameResult.SUCCESS.text = successTextTemplate.replace(`{i}`, place)
+      .replace(`{n}`, `${scores.length}&nbsp;${gamers}`)
       .replace(`{p}`, percent);
+
+  GameResult.SUCCESS.comparison = successComparisonTemplate.replace(`{i}`, place)
+      .replace(`{m}`, `${3}&nbsp;${minutes}`)
+      .replace(`{s}`, `${1}&nbsp;${seconds}`)
+      .replace(`{p}`, `${ownResult.score}&nbsp;${points}`)
+      .replace(`{f}`, `8`)
+      .replace(`{e}`, `${2}&nbsp;${errors}`);
+
+  return GameResult.SUCCESS;
 };

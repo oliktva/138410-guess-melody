@@ -13,23 +13,23 @@ export const DeclensionRule = {
  * @param {number} max
  * @return {number}
  */
-export const getRandom = function (min, max) {
+export const getRandom = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
 /**
  * @param {number} count
- * @return {boolean}
+ * @return {Boolean}
  */
-const isMany = function (count) {
+const isMany = (count) => {
   return count >= DeclensionRule.MANY_MIN && count <= DeclensionRule.MANY_MAX || count % 10 === DeclensionRule.ZERO;
 };
 
 /**
  * @param {number} count
- * @return {boolean}
+ * @return {Boolean}
  */
-const isFew = function (count) {
+const isFew = (count) => {
   return count % 10 >= DeclensionRule.FEW_MIN && count % 10 <= DeclensionRule.FEW_MAX;
 };
 
@@ -38,7 +38,7 @@ const isFew = function (count) {
  * @param {object} variants
  * @return {string}
  */
-export const getDeclensionWord = function (count, variants) {
+export const getDeclensionWord = (count, variants) => {
   if (isMany(count)) {
     return variants.many || variants.other;
   }
