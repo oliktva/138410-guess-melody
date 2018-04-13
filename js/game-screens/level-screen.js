@@ -11,17 +11,23 @@ import {
 
 import resultScreenElement from './result-screen.js';
 
+import {GameLimit} from '../helpers/result.js';
 import {state, ARTIST, GENRE} from '../game-data.js';
 
 /** @constant {string} */
 const ACTION = `Ответить`;
 
-const checkAnswer = (answersIndex) => {
+const checkAnswer = (answersIndeces) => {
   const {levels: {current, resources}} = state;
+  const currentAnswers = resources[current].answers;
+  const correctAnswers = currentAnswers.filter((answer) => answer.correct);
+  let isCorrect = false;
 
-  let isCorrect = answersIndex.reduce((result, answerIndex) => {
-    return result && resources[current].answers[answerIndex - 1].correct;
-  }, true);
+  if (answersIndeces.length === correctAnswers.length) {
+    isCorrect = answersIndeces.reduce((result, answerIndex) => {
+      return result && currentAnswers[answerIndex - 1].correct;
+    }, true);
+  }
 
   state.results.push({result: isCorrect, time: getRandom(0, 30)});
 
@@ -110,7 +116,7 @@ const checkAnswersHandler = (evt, answer, form) => {
  * @return {Element}
  */
 const getNextScreenElement = (isLastLevel) => {
-  if (isLastLevel) {
+  if (state.errors === GameLimit.MAX_FALSE_ANSWERS_VALUE || isLastLevel) {
     return resultScreenElement();
   } else {
     state.levels.current++;
