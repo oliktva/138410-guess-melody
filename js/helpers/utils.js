@@ -65,3 +65,13 @@ export const getDeclensionWord = (count, variants) => {
   }
   return variants.other;
 };
+
+/**
+ * @param {Element} element
+ */
+export const changeView = (element) => {
+  if (element) {
+    const activeScreen = document.querySelector(`.main`);
+    activeScreen.parentElement.replaceChild(element, activeScreen);
+  }
+};
