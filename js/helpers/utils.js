@@ -8,6 +8,21 @@ export const DeclensionRule = {
   MANY_MAX: 19
 };
 
+/** @enum {number} */
+export const KeyCodes = {
+  ENTER: 13
+};
+
+/**
+ * @param {string} markup
+ * @return {Element}
+ */
+export const getElementFromTemplate = function (markup) {
+  let template = document.createElement(`template`);
+  template.innerHTML = markup.trim();
+  return template.content.firstChild;
+};
+
 /**
  * @param {number} min
  * @param {number} max

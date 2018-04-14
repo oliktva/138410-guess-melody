@@ -99,7 +99,7 @@ const initialState = {
     minutes: `5`,
     seconds: `00`
   },
-  errors: 0,
+  mistakes: 0,
   results: [],
   allResults: [],
   levels: {

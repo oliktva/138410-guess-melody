@@ -57,7 +57,7 @@ export const getScore = (answers) => {
  */
 export const getGameResult = (ownResult, otherScores = []) => {
   if (ownResult.score === -1) {
-    if (ownResult.errors === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
+    if (ownResult.mistakes === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
       return GameResult.ATTEMPTS_ENDED;
     }
     return GameResult.TIME_OVER;
@@ -82,7 +82,7 @@ export const getGameResult = (ownResult, otherScores = []) => {
   const points = getDeclensionWord(
       ownResult.score, {one: `балл`, few: `балла`, many: `баллов`, other: `балла`}
   );
-  const errors = getDeclensionWord(
+  const mistakes = getDeclensionWord(
       2, {one: `ошибку`, few: `ошибки`, many: `ошибок`, other: `ошибки`}
   );
 
@@ -95,7 +95,7 @@ export const getGameResult = (ownResult, otherScores = []) => {
       .replace(`{s}`, `${1}&nbsp;${seconds}`)
       .replace(`{p}`, `${ownResult.score}&nbsp;${points}`)
       .replace(`{f}`, `8`)
-      .replace(`{e}`, `${2}&nbsp;${errors}`);
+      .replace(`{e}`, `${2}&nbsp;${mistakes}`);
 
   return GameResult.SUCCESS;
 };
