@@ -1,4 +1,5 @@
 import AbstractView from './abstract-view.js';
+import HeaderBlock from '../components/header-block.js';
 
 /** @enum {string} */
 const Data = {
@@ -12,21 +13,26 @@ export default class WelcomeView extends AbstractView {
     super();
   }
 
+  /** @return {string} */
   get template() {
+    const header = new HeaderBlock();
+
     return (
-      `<div>
+      `<section class="main main--welcome">
+        ${header.template}
         <button class="main-play">${Data.ACTION}</button>
         <h2 class="title main-title">${Data.TITLE}</h2>
         <p class="text main-text">${Data.TEXT}</p>
-      </div>`
+      </section>`
     );
   }
 
   startGameHandler() {}
 
-  bind() {
-    if (this.element && typeof this.startGameHandler === `function`) {
-      const startGame = this.element.querySelector(`.main-play`);
+  /** @param {Element} element */
+  bind(element) {
+    if (element && typeof this.startGameHandler === `function`) {
+      const startGame = element.querySelector(`.main-play`);
       startGame.addEventListener(`click`, (evt) => {
         evt.preventDefault();
         this.startGameHandler();

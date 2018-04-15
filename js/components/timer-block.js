@@ -1,11 +1,13 @@
-import AbstractView from './abstract-view.js';
+import AbstractView from '../views/abstract-view.js';
 
-export default class TimerView extends AbstractView {
+export default class TimerBlock extends AbstractView {
+  /** @param {object} remainingTime */
   constructor(remainingTime) {
     super();
     this.remainingTime = remainingTime;
   }
 
+  /** @return {string} */
   get template() {
     return (
       `<svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">

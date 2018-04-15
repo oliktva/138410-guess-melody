@@ -1,4 +1,5 @@
 import AbstractView from './abstract-view.js';
+import HeaderBlock from '../components/header-block.js';
 
 export default class ResultView extends AbstractView {
   constructor(result) {
@@ -6,6 +7,7 @@ export default class ResultView extends AbstractView {
     this.result = result;
   }
 
+  /** @return {string} */
   get template() {
     const {
       title,
@@ -14,25 +16,26 @@ export default class ResultView extends AbstractView {
       action
     } = this.result;
 
+    const header = new HeaderBlock();
+
     return (
-      `<div>
+      `<section class="main main--result">
+        ${header.template}
         <h2 class="title">${title}</h2>
         <div class="main-stat">${text}</div>
         ${comparison ? `<span class="main-comparison">${comparison}</span>` : ``}
         <span role="button" tabindex="0" class="main-replay">${action}</span>
-      </div>`
+      </section>`
     );
   }
 
-  startGameHandler() {}
+  replayHandler() {}
 
-  bind() {
-    if (this.element && typeof this.startGameHandler === `function`) {
-      const startGame = this.element.querySelector(`.main-replay`);
-      startGame.addEventListener(`click`, (evt) => {
-        evt.preventDefault();
-        this.startGameHandler();
-      });
+  /** @param {Element} element */
+  bind(element) {
+    if (element && typeof this.replayHandler === `function`) {
+      const replayGame = element.querySelector(`.main-replay`);
+      replayGame.addEventListener(`click`, this.replayHandler);
     }
   }
 }

@@ -7,21 +7,23 @@ export default class AbstractView {
     }
   }
 
+  /** @return {string} */
   get template() {
     return ``;
   }
 
   get element() {
-    if (this.element) {
-      return this.element;
+    if (this._element) {
+      return this._element;
     }
-    this.element = this.render();
-    this.bind();
-    return this.element;
+    this._element = this.render();
+    this.bind(this._element);
+    return this._element;
   }
 
   bind() {}
 
+  /** @return {Element} */
   render() {
     return getElementFromTemplate(this.template);
   }

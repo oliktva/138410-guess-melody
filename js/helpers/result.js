@@ -2,7 +2,7 @@ import {getDeclensionWord} from './utils.js';
 
 /** @enum {number} */
 export const GameLimit = {
-  ANSWERS_VALUE: 10,
+  LEVELS_VALUE: 10,
   MAX_FALSE_ANSWERS_VALUE: 3,
   FAST_ANSWER_TIME: 30
 };
@@ -37,7 +37,7 @@ export const GameResult = {
 export const getScore = (answers) => {
   let falseAnswers = answers.filter((answer) => !answer.result);
 
-  if (answers.length < GameLimit.ANSWERS_VALUE || falseAnswers.length === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
+  if (answers.length < GameLimit.LEVELS_VALUE || falseAnswers.length === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
     return -1;
   }
 
@@ -71,7 +71,7 @@ export const getGameResult = (ownResult, otherScores = []) => {
   const place = scores.length - position;
   const percent = Math.floor((position / scores.length) * 100);
   const gamers = getDeclensionWord(
-      scores.length, {one: `игрока`, few: `игрока`, many: `игроков`, other: `игроков`}
+      scores.length, {one: `игрока`, other: `игроков`}
   );
   const minutes = getDeclensionWord(
       3, {one: `минуту`, few: `минуты`, many: `минут`, other: `минуты`}

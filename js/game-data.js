@@ -100,8 +100,8 @@ const initialState = {
     seconds: `00`
   },
   mistakes: 0,
+  gamerResults: [],
   results: [],
-  allResults: [],
   levels: {
     current: 0,
     resources
