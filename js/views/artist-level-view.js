@@ -34,7 +34,7 @@ export default class ArtistLevelView extends AbstractView {
 
     const timerView = new TimerBlock(remainingTime);
     const mistakesView = new MistakesBlock(mistakes);
-    const playerView = new PlayerBlock(audio);
+    const playerView = new PlayerBlock(audio, true);
 
     return (
       `<section class="main main--level main--level-artist">
