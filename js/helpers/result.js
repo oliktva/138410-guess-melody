@@ -2,7 +2,7 @@ import {getDeclensionWord} from './utils.js';
 
 /** @enum {number} */
 export const GameLimit = {
-  ANSWERS_VALUE: 10,
+  LEVELS_VALUE: 10,
   MAX_FALSE_ANSWERS_VALUE: 3,
   FAST_ANSWER_TIME: 30
 };
@@ -37,7 +37,7 @@ export const GameResult = {
 export const getScore = (answers) => {
   let falseAnswers = answers.filter((answer) => !answer.result);
 
-  if (answers.length < GameLimit.ANSWERS_VALUE || falseAnswers.length === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
+  if (answers.length < GameLimit.LEVELS_VALUE || falseAnswers.length === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
     return -1;
   }
 
@@ -57,7 +57,7 @@ export const getScore = (answers) => {
  */
 export const getGameResult = (ownResult, otherScores = []) => {
   if (ownResult.score === -1) {
-    if (ownResult.errors === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
+    if (ownResult.mistakes === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
       return GameResult.ATTEMPTS_ENDED;
     }
     return GameResult.TIME_OVER;
@@ -71,7 +71,7 @@ export const getGameResult = (ownResult, otherScores = []) => {
   const place = scores.length - position;
   const percent = Math.floor((position / scores.length) * 100);
   const gamers = getDeclensionWord(
-      scores.length, {one: `игрока`, few: `игрока`, many: `игроков`, other: `игроков`}
+      scores.length, {one: `игрока`, other: `игроков`}
   );
   const minutes = getDeclensionWord(
       3, {one: `минуту`, few: `минуты`, many: `минут`, other: `минуты`}
@@ -82,7 +82,7 @@ export const getGameResult = (ownResult, otherScores = []) => {
   const points = getDeclensionWord(
       ownResult.score, {one: `балл`, few: `балла`, many: `баллов`, other: `балла`}
   );
-  const errors = getDeclensionWord(
+  const mistakes = getDeclensionWord(
       2, {one: `ошибку`, few: `ошибки`, many: `ошибок`, other: `ошибки`}
   );
 
@@ -95,7 +95,7 @@ export const getGameResult = (ownResult, otherScores = []) => {
       .replace(`{s}`, `${1}&nbsp;${seconds}`)
       .replace(`{p}`, `${ownResult.score}&nbsp;${points}`)
       .replace(`{f}`, `8`)
-      .replace(`{e}`, `${2}&nbsp;${errors}`);
+      .replace(`{e}`, `${2}&nbsp;${mistakes}`);
 
   return GameResult.SUCCESS;
 };

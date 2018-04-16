@@ -99,9 +99,9 @@ const initialState = {
     minutes: `5`,
     seconds: `00`
   },
-  errors: 0,
+  mistakes: 0,
+  gamerResults: [],
   results: [],
-  allResults: [],
   levels: {
     current: 0,
     resources

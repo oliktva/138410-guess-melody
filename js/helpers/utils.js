@@ -8,6 +8,21 @@ export const DeclensionRule = {
   MANY_MAX: 19
 };
 
+/** @enum {number} */
+export const KeyCodes = {
+  ENTER: 13
+};
+
+/**
+ * @param {string} markup
+ * @return {Element}
+ */
+export const getElementFromTemplate = function (markup) {
+  let template = document.createElement(`template`);
+  template.innerHTML = markup.trim();
+  return template.content.firstChild;
+};
+
 /**
  * @param {number} min
  * @param {number} max
@@ -49,4 +64,14 @@ export const getDeclensionWord = (count, variants) => {
     return variants.one || variants.other;
   }
   return variants.other;
+};
+
+/**
+ * @param {Element} element
+ */
+export const changeView = (element) => {
+  if (element) {
+    const activeScreen = document.querySelector(`.main`);
+    activeScreen.parentElement.replaceChild(element, activeScreen);
+  }
 };

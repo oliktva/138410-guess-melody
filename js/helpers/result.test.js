@@ -76,7 +76,7 @@ describe(`result`, () => {
   describe(`getGameResult`, () => {
     const otherResultsData = [13, 17, 16, 19, 11, 15, 15, 1, 3];
     let score;
-    let errors;
+    let mistakes;
 
     const successResult = `Вы&nbsp;заняли {i}-ое место из&nbsp;{g}&nbsp;игроков.<br>Это лучше, чем у&nbsp;{p}% игроков`;
     const timeOverResult = `Время вышло!<br>Вы&nbsp;не&nbsp;успели отгадать все мелодии`;
@@ -84,22 +84,22 @@ describe(`result`, () => {
 
     beforeEach(() => {
       score = 20;
-      errors = 1;
+      mistakes = 1;
     });
 
     it(`should return timeOverResult when the own result equals -1 and time equals 0`, () => {
       score = -1;
 
-      const actual = getGameResult({score, errors}, otherResultsData).text;
+      const actual = getGameResult({score, mistakes}, otherResultsData).text;
 
       expect(actual).to.equal(timeOverResult);
     });
 
     it(`should return attemptsEndedResult when the own result equals -1 and lives equal 0`, () => {
       score = -1;
-      errors = 3;
+      mistakes = 3;
 
-      const actual = getGameResult({score, errors}, otherResultsData).text;
+      const actual = getGameResult({score, mistakes}, otherResultsData).text;
 
       expect(actual).to.equal(attemptsEndedResult);
     });
@@ -110,10 +110,10 @@ describe(`result`, () => {
       const expected3 = successResult.replace(`{i}`, 2).replace(`{g}`, 10).replace(`{p}`, 80);
       const expected4 = successResult.replace(`{i}`, 1).replace(`{g}&nbsp;игроков`, `1&nbsp;игрока`).replace(`{p}`, 0);
 
-      const actual1 = getGameResult({score, errors}, otherResultsData).text;
-      const actual2 = getGameResult({score: 9, errors}, otherResultsData).text;
-      const actual3 = getGameResult({score: 18, errors}, otherResultsData).text;
-      const actual4 = getGameResult({score: 18, errors}, []).text;
+      const actual1 = getGameResult({score, mistakes}, otherResultsData).text;
+      const actual2 = getGameResult({score: 9, mistakes}, otherResultsData).text;
+      const actual3 = getGameResult({score: 18, mistakes}, otherResultsData).text;
+      const actual4 = getGameResult({score: 18, mistakes}, []).text;
 
       expect(actual1).to.equal(expected1);
       expect(actual2).to.equal(expected2);
