@@ -96,8 +96,8 @@ for (let i = 0; i < 5; i++) {
 
 const initialState = {
   remainingTime: {
-    minutes: `5`,
-    seconds: `00`
+    minutes: 5,
+    seconds: 0
   },
   mistakes: 0,
   gamerResults: [],
