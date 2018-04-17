@@ -1,4 +1,12 @@
-import {getElementFromTemplate} from '../helpers/utils.js';
+/**
+ * @param {string} markup
+ * @return {Element}
+ */
+export const getElementFromTemplate = function (markup) {
+  let template = document.createElement(`template`);
+  template.innerHTML = markup.trim();
+  return template.content.firstChild;
+};
 
 export default class AbstractView {
   constructor() {

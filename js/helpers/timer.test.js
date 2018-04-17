@@ -39,10 +39,4 @@ describe(`timer`, () => {
     expect(timer.remainingTime).to.be.a(`number`);
     expect(timer.timerId).to.equal(null);
   });
-
-  it(`should return format time`, () => {
-    expect((new Timer(390)).formattedRemainingTime).to.equal(`6:30`);
-    expect((new Timer(60)).formattedRemainingTime).to.equal(`1:00`);
-    expect((new Timer(45)).formattedRemainingTime).to.equal(`0:45`);
-  });
 });

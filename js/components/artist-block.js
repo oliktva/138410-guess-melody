@@ -1,6 +1,4 @@
-import AbstractView from './abstract-view.js';
-import TimerBlock from '../components/timer-block.js';
-import MistakesBlock from '../components/mistakes-block.js';
+import AbstractView from '../views/abstract-view.js';
 import PlayerBlock from '../components/player-block.js';
 
 /**
@@ -21,34 +19,36 @@ const getAnswerTemplate = (answer, index) => {
 };
 
 export default class ArtistLevelView extends AbstractView {
-  /** @param {object} state */
-  constructor(state) {
+  /** @param {object} props */
+  constructor(props) {
     super();
-    this.state = state;
+    this._props = props;
   }
 
   /** @return {string} */
   get template() {
-    const {remainingTime, mistakes, levels} = this.state;
-    const {question: {title, audio}, answers} = levels.resources[levels.current];
+    const {question: {title, audio}, answers} = this._props;
 
-    const timerView = new TimerBlock(remainingTime);
-    const mistakesView = new MistakesBlock(mistakes);
-    const playerView = new PlayerBlock(audio, true);
+    const player = new PlayerBlock(audio, true);
 
     return (
-      `<section class="main main--level main--level-artist">
-        ${timerView.template}
-        ${mistakesView.template}
-        <div class="main-wrap">
+      `<div class="main-wrap">
           <h2 class="title main-title">${title}</h2>
-          ${playerView.template}
+          ${player.template}
           <form class="main-list">
             ${answers.map((answer, index) => getAnswerTemplate(answer, index + 1)).join(``)}
           </form>
-        </div>
-      </section>`
+        </div>`
     );
+  }
+
+  get elementSelector() {
+    return `.main-wrap`;
+  }
+
+  get gamerAnswers() {
+    const answer = document.querySelector(`.main-answer-wrapper input:checked`);
+    return [answer.value.substr(-1) - 1];
   }
 
   nextViewHandler() {}

@@ -2,9 +2,9 @@ import AbstractView from './abstract-view.js';
 import HeaderBlock from '../components/header-block.js';
 
 export default class ResultView extends AbstractView {
-  constructor(result) {
+  constructor(props) {
     super();
-    this.result = result;
+    this._props = props;
   }
 
   /** @return {string} */
@@ -14,7 +14,7 @@ export default class ResultView extends AbstractView {
       text,
       comparison,
       action
-    } = this.result;
+    } = this._props;
 
     const header = new HeaderBlock();
 

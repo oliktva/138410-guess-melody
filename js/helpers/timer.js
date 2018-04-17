@@ -1,37 +1,40 @@
 export default class Timer {
   /**
    * @param {number} time
+   * @param {function} cb
    */
-  constructor(time) {
+  constructor(time, cb = () => {}) {
     if (typeof time !== `number` || time < 0) {
       throw new Error(`Time should be a positive number`);
     }
 
     this.remainingTime = time;
     this.timerId = null;
+    this.cb = cb;
   }
 
   /**
-   * @return {string}
+   * @param  {number} time
+   * @return {object}
    */
-  get formattedRemainingTime() {
-    const minutes = Math.floor(this.remainingTime / 60);
-    const seconds = this.addZeroIfNeed(this.remainingTime - minutes * 60);
+  static getFormattedTime(time) {
+    const minutes = Math.floor(time / 60);
 
-    return `${minutes}:${seconds}`;
+    return {minutes, seconds: time - minutes * 60};
   }
 
   /**
    * @param {number} time
    * @return {(string|number)}
    */
-  addZeroIfNeed(time) {
+  static addZeroIfNeed(time) {
     return time < 10 ? `0${time}` : time;
   }
 
   tick() {
     if (this.remainingTime) {
       this.remainingTime--;
+      this.cb();
     }
     if (this.remainingTime < 1) {
       this.stop();

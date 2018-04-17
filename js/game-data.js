@@ -2,6 +2,8 @@
 export const ARTIST = `artist`;
 export const GENRE = `genre`;
 
+import {GameLimit} from './helpers/result.js';
+
 const audio = [
   {
     artist: `Kevin MacLeod`,
@@ -90,15 +92,12 @@ const genre = {
 
 const resources = [];
 for (let i = 0; i < 5; i++) {
-  resources.push(artist);
   resources.push(genre);
+  resources.push(artist);
 }
 
-const initialState = {
-  remainingTime: {
-    minutes: 5,
-    seconds: 0
-  },
+export const initialState = Object.freeze({
+  remainingTime: GameLimit.TIME,
   mistakes: 0,
   gamerResults: [],
   results: [],
@@ -106,6 +105,13 @@ const initialState = {
     current: 0,
     resources
   }
+});
+
+export const clearState = (state) => {
+  state.mistakes = initialState.mistakes;
+  state.gamerResults = initialState.gamerResults;
+  state.remainingTime = initialState.remainingTime;
+  state.levels.current = initialState.levels.current;
 };
 
-export const state = Object.assign(initialState);
+export const state = JSON.parse(JSON.stringify(initialState));

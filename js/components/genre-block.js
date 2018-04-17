@@ -1,6 +1,4 @@
-import AbstractView from './abstract-view.js';
-import TimerBlock from '../components/timer-block.js';
-import MistakesBlock from '../components/mistakes-block.js';
+import AbstractView from '../views/abstract-view.js';
 import PlayerBlock from '../components/player-block.js';
 
 /** @constant {string} */
@@ -24,33 +22,34 @@ const getAnswerTemplate = (answer, index) => {
 };
 
 export default class GenreLevelView extends AbstractView {
-  /** @param {object} state */
-  constructor(state) {
+  /** @param {object} props */
+  constructor(props) {
     super();
-    this.state = state;
+    this._props = props;
   }
 
   /** @return {string} */
   get template() {
-    const {remainingTime, mistakes, levels} = this.state;
-    const {question: {title}, answers} = levels.resources[levels.current];
-
-    const timerView = new TimerBlock(remainingTime);
-    const mistakesView = new MistakesBlock(mistakes);
+    const {question: {title}, answers} = this._props;
 
     return (
-      `<section class="main main--level main--level-artist">
-        ${timerView.template}
-        ${mistakesView.template}
-        <div class="main-wrap">
+      `<div class="main-wrap">
           <h2 class="title main-title">${title}</h2>
           <form class="genre">
             ${answers.map((answer, index) => getAnswerTemplate(answer, index + 1)).join(``)}
             <button class="genre-answer-send" type="submit" disabled>${ACTION}</button>
           </form>
-        </div>
-      <section>`
+        </div>`
     );
+  }
+
+  get elementSelector() {
+    return `.main-wrap`;
+  }
+
+  get gamerAnswers() {
+    const answers = Array.from(document.querySelectorAll(`.genre-answer input:checked`));
+    return answers.map((answer) => answer.value.substr(-1) - 1);
   }
 
   _activateSubmitHandler(evt, form, answer) {

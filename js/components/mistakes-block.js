@@ -4,13 +4,13 @@ export default class MistakesBlock extends AbstractView {
   /** @param {number} mistakes */
   constructor(mistakes) {
     super();
-    this.mistakes = mistakes;
+    this._mistakes = mistakes;
   }
 
   /** @return {string} */
   get template() {
     const mistakeTemplate = [];
-    for (let i = 0; i < this.mistakes; i++) {
+    for (let i = 0; i < this._mistakes; i++) {
       mistakeTemplate.push(`<img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">`);
     }
 
@@ -19,5 +19,9 @@ export default class MistakesBlock extends AbstractView {
         ${mistakeTemplate.join(``)}
       </div>`
     );
+  }
+
+  get elementSelector() {
+    return `.main-mistakes`;
   }
 }
