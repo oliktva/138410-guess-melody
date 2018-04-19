@@ -30,4 +30,9 @@ export default class MistakesBlock extends AbstractView {
   get elementSelector() {
     return `.main-mistakes`;
   }
+
+  update(mistakes) {
+    this._mistakes = mistakes;
+    document.querySelector(`.main-mistakes`).innerHTML = getMistakesTemplate(mistakes).join(``);
+  }
 }

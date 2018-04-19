@@ -14,7 +14,7 @@ import {ARTIST} from '../game-data.js';
 export default class WelcomePresenter {
   constructor(model) {
     this.model = model;
-    this.view = new LevelView({type: this.model.currentLevelResource.type});
+    this.view = new LevelView();
 
     const level = this.model.currentLevelResource;
     const time = this.model.remainingTime;
@@ -40,11 +40,6 @@ export default class WelcomePresenter {
     this.view.element.appendChild(this.levelBlock.element);
 
     return this.view.element;
-  }
-
-  _changeView(newView, view) {
-    this.view.element.replaceChild(newView.element, view.element);
-    view = newView;
   }
 
   _stopGame() {
@@ -80,18 +75,21 @@ export default class WelcomePresenter {
   }
 
   _updateMistakes() {
-    const view = new MistakesBlock(this.model.mistakes);
-
-    this._changeView(view, this.mistakesBlock);
+    this.mistakesBlock.update(this.model.mistakes);
   }
 
   _updateLevel() {
-    this.levelBlock.clear();
+    // this.levelBlock.clear();
     const view = this.model.currentLevelResource.type === ARTIST ? new ArtistBlock(this.model.currentLevelResource) : new GenreBlock(this.model.currentLevelResource);
     view.nextViewHandler = (event) => {
       this._nextViewHandler(event);
     };
 
-    this._changeView(view, this.levelBlock);
+    this._updateLevelView(view, this.levelBlock);
+  }
+
+  _updateLevelView(newView) {
+    this.view.element.replaceChild(newView.element, this.levelBlock.element);
+    this.levelBlock = newView;
   }
 }

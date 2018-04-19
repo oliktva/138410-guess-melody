@@ -93,8 +93,8 @@ const genre = {
 
 const resources = [];
 for (let i = 0; i < 5; i++) {
-  resources.push(genre);
   resources.push(artist);
+  resources.push(genre);
 }
 
 const initialState = Object.freeze({
