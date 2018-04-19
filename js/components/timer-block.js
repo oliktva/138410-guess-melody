@@ -49,8 +49,8 @@ export default class TimerBlock extends AbstractView {
   update(time) {
     const {minutes, seconds} = Timer.getFormattedTime(this._remainingTime);
     const {minutes: newMinutes, seconds: newSeconds} = Timer.getFormattedTime(time);
-    const mins = document.querySelector(`.timer-value-mins`);
-    const secs = document.querySelector(`.timer-value-secs`);
+    const mins = this.element.querySelector(`.timer-value-mins`);
+    const secs = this.element.querySelector(`.timer-value-secs`);
 
     if (minutes !== newMinutes) {
       mins.innerText = newMinutes;
