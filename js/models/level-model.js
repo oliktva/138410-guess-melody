@@ -41,4 +41,20 @@ export default class LevelModel {
   isGameOver() {
     return this._data.mistakes === GameLimit.MAX_FALSE_ANSWERS_VALUE || this._data.levels.current === GameLimit.LEVELS_VALUE - 1;
   }
+
+  /**
+   * @param  {Array} answersIndeces
+   * @return {boolean}
+   */
+  checkAnswers(answersIndeces) {
+    const {answers} = this.currentLevelResource;
+
+    return answers.reduce((result, answer, index) => {
+      if (answer.correct) {
+        return result && answersIndeces.includes(index);
+      } else {
+        return result && !answersIndeces.includes(index);
+      }
+    }, true);
+  }
 }

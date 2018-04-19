@@ -2,6 +2,14 @@ import AbstractView from '../views/abstract-view.js';
 
 const MISTAKE_TEMPLATE = `<img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">`;
 
+const getMistakesTemplate = (mistakes) => {
+  const mistakesTemplate = [];
+  for (let i = 0; i < mistakes; i++) {
+    mistakesTemplate.push(MISTAKE_TEMPLATE);
+  }
+  return mistakesTemplate;
+};
+
 export default class MistakesBlock extends AbstractView {
   /** @param {number} mistakes */
   constructor(mistakes) {
@@ -14,25 +22,12 @@ export default class MistakesBlock extends AbstractView {
 
     return (
       `<div class="main-mistakes">
-        ${this.mistakesTemplate.join(``)}
+        ${getMistakesTemplate(this._mistakes).join(``)}
       </div>`
     );
   }
 
-  get mistakesTemplate() {
-    const mistakesTemplate = [];
-    for (let i = 0; i < this._mistakes; i++) {
-      mistakesTemplate.push(MISTAKE_TEMPLATE);
-    }
-    return mistakesTemplate;
-  }
-
   get elementSelector() {
     return `.main-mistakes`;
-  }
-
-  update(mistakes) {
-    this._mistakes = mistakes;
-    document.querySelector(`.main-mistakes`).innerHTML = this.mistakesTemplate.join(``);
   }
 }

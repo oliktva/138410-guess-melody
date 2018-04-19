@@ -11,17 +11,6 @@ import Timer from '../helpers/timer.js';
 
 import {ARTIST} from '../game-data.js';
 
-/**
- * @param {Element} element
- * @param {string} selector
- */
-const updateElement = (element, selector) => {
-  if (element) {
-    const activeScreen = document.querySelector(selector);
-    activeScreen.parentElement.replaceChild(element, activeScreen);
-  }
-};
-
 export default class WelcomePresenter {
   constructor(model) {
     this.model = model;
@@ -53,20 +42,9 @@ export default class WelcomePresenter {
     return this.view.element;
   }
 
-  /**
-   * @param  {Array} answersIndeces
-   * @return {boolean}
-   */
-  _checkAnswers(answersIndeces) {
-    const {answers} = this.model.currentLevelResource;
-
-    return answers.reduce((result, answer, index) => {
-      if (answer.correct) {
-        return result && answersIndeces.includes(index);
-      } else {
-        return result && !answersIndeces.includes(index);
-      }
-    }, true);
+  _changeView(newView, view) {
+    this.view.element.replaceChild(newView.element, view.element);
+    view = newView;
   }
 
   _stopGame() {
@@ -77,7 +55,7 @@ export default class WelcomePresenter {
   _nextViewHandler(evt) {
     evt.preventDefault();
 
-    const isCorrect = this._checkAnswers(this.levelBlock.gamerAnswers);
+    const isCorrect = this.model.checkAnswers(this.levelBlock.gamerAnswers);
     this.model.addGamerResult({result: isCorrect, time: this.model.remainingTime});
 
     if (!isCorrect) {
@@ -102,16 +80,18 @@ export default class WelcomePresenter {
   }
 
   _updateMistakes() {
-    this.mistakesBlock.update(this.model.mistakes);
+    const view = new MistakesBlock(this.model.mistakes);
+
+    this._changeView(view, this.mistakesBlock);
   }
 
   _updateLevel() {
     this.levelBlock.clear();
-    this.levelBlock = this.model.currentLevelResource.type === ARTIST ? new ArtistBlock(this.model.currentLevelResource) : new GenreBlock(this.model.currentLevelResource);
-    this.levelBlock.nextViewHandler = (event) => {
+    const view = this.model.currentLevelResource.type === ARTIST ? new ArtistBlock(this.model.currentLevelResource) : new GenreBlock(this.model.currentLevelResource);
+    view.nextViewHandler = (event) => {
       this._nextViewHandler(event);
     };
 
-    updateElement(this.levelBlock.element, this.levelBlock.elementSelector);
+    this._changeView(view, this.levelBlock);
   }
 }
