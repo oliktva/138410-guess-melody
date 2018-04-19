@@ -59,4 +59,9 @@ export default class ArtistLevelView extends AbstractView {
       answerForm.addEventListener(`change`, this.nextViewHandler);
     }
   }
+
+  clear() {
+    this._element = null;
+    document.querySelector(`form.main-list`).removeEventListener(`change`, this.nextViewHandler);
+  }
 }

@@ -75,4 +75,13 @@ export default class GenreLevelView extends AbstractView {
       answer.addEventListener(`click`, this.nextViewHandler);
     }
   }
+
+  clear() {
+    this._element = null;
+    const answerForm = document.querySelector(`form.genre`);
+    const answer = document.querySelector(`.genre-answer-send`);
+
+    answerForm.removeEventListener(`change`, (evt) => this._activateSubmitHandler(evt, answerForm, answer));
+    answer.removeEventListener(`click`, this.nextViewHandler);
+  }
 }

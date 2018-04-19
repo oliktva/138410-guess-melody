@@ -7,6 +7,10 @@
   z-index: 0;
 }
 
+.timer-start {
+  animation: timer 300s linear backwards;
+}
+
 .timer-line {
   fill: transparent;
   stroke: $color-orange;
@@ -61,4 +65,10 @@
   0%   { transform: translateX(-50%) scale(1); }
   50%  { transform: translateX(-50%) scale(1.1); }
   100% { transform: translateX(-50%) scale(1); }
+}
+
+@keyframes timer {
+  from {
+    stroke-dashoffset: 0;
+  }
 }

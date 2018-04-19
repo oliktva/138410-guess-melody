@@ -2,7 +2,7 @@ import AbstractView from '../views/abstract-view.js';
 
 import Timer from '../helpers/timer.js';
 
-import {GameLimit} from '../helpers/result.js';
+const dashaaray = 2 * Math.PI * 370;
 
 export default class TimerBlock extends AbstractView {
   /** @param {number} remainingTime */
@@ -11,19 +11,8 @@ export default class TimerBlock extends AbstractView {
     this._remainingTime = remainingTime;
   }
 
-  /**
-   * @param  {object} remainingTime
-   * @return {object}
-   */
-  _calculateTimerLine(remainingTime = 0) {
-    const dashaaray = 2 * Math.PI * 370;
-    const dashoffset = dashaaray - remainingTime * dashaaray / GameLimit.TIME;
-    return {dashaaray, dashoffset};
-  }
-
   /** @return {string} */
   get template() {
-    const timerVisualEffect = this._calculateTimerLine(this._remainingTime);
     const {minutes, seconds} = Timer.getFormattedTime(this._remainingTime);
 
     return (
@@ -31,10 +20,10 @@ export default class TimerBlock extends AbstractView {
         <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
           <circle
             cx="390" cy="390" r="370"
-            class="timer-line"
-            style="stroke-dashoffset: ${timerVisualEffect.dashoffset};stroke-dasharray: ${timerVisualEffect.dashaaray};filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center;"></circle>
+            class="timer-line timer-start"
+            style="stroke-dashoffset: ${dashaaray};stroke-dasharray: ${dashaaray};filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center;"></circle>
         </svg>
-        <div class="timer-value" xmlns="http://www.w3.org/1999/xhtml">
+        <div class="timer-value">
           <span class="timer-value-mins">${minutes}</span><!--
           --><span class="timer-value-dots">:</span><!--
           --><span class="timer-value-secs">${Timer.addZeroIfNeed(seconds)}</span>
@@ -43,9 +32,38 @@ export default class TimerBlock extends AbstractView {
     );
   }
 
-  get elementSelector() {
-    return `.timer-wrapper`;
+  get minutesElement() {
+    this._element = super.element;
+    return this._element.querySelector(`.timer-value-mins`);
   }
 
-  timerChangeHandler() {}
+  get secondsElement() {
+    this._element = super.element;
+    return this._element.querySelector(`.timer-value-secs`);
+  }
+
+  get elementSelector() {
+    return `.timer-value`;
+  }
+
+  update(time) {
+    const {minutes, seconds} = Timer.getFormattedTime(this._remainingTime);
+    const {minutes: newMinutes, seconds: newSeconds} = Timer.getFormattedTime(time);
+    const mins = document.querySelector(`.timer-value-mins`);
+    const secs = document.querySelector(`.timer-value-secs`);
+
+    if (minutes !== newMinutes) {
+      mins.innerText = newMinutes;
+    }
+
+    if (seconds !== newSeconds) {
+      secs.innerText = newSeconds;
+    }
+
+    this._remainingTime = time;
+  }
+
+  clear() {
+    this._element = null;
+  }
 }

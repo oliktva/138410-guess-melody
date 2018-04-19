@@ -22,8 +22,6 @@ const updateElement = (element, selector) => {
   }
 };
 
-const getCurrentElement = (viewElement, blockSelector) => viewElement.querySelector(blockSelector);
-
 export default class WelcomePresenter {
   constructor(model) {
     this.model = model;
@@ -46,16 +44,12 @@ export default class WelcomePresenter {
   }
 
   get element() {
-    if (!getCurrentElement(this.view.element, this.timerBlock.elementSelector)) {
-      this.timer.start();
-      this.view.element.appendChild(this.timerBlock.element);
-    }
-    if (!getCurrentElement(this.view.element, this.mistakesBlock.elementSelector)) {
-      this.view.element.appendChild(this.mistakesBlock.element);
-    }
-    if (!getCurrentElement(this.view.element, this.levelBlock.elementSelector)) {
-      this.view.element.appendChild(this.levelBlock.element);
-    }
+    this.timer.start();
+
+    this.view.element.appendChild(this.timerBlock.element);
+    this.view.element.appendChild(this.mistakesBlock.element);
+    this.view.element.appendChild(this.levelBlock.element);
+
     return this.view.element;
   }
 
@@ -103,17 +97,16 @@ export default class WelcomePresenter {
     if (remainingTime === 0) {
       this._stopGame();
     } else {
-      this.timerBlock = new TimerBlock(remainingTime);
-      updateElement(this.timerBlock.element, this.timerBlock.elementSelector);
+      this.timerBlock.update(remainingTime);
     }
   }
 
   _updateMistakes() {
-    this.mistakesBlock = new MistakesBlock(this.model.mistakes);
-    updateElement(this.mistakesBlock.element, this.mistakesBlock.elementSelector);
+    this.mistakesBlock.update(this.model.mistakes);
   }
 
   _updateLevel() {
+    this.levelBlock.clear();
     this.levelBlock = this.model.currentLevelResource.type === ARTIST ? new ArtistBlock(this.model.currentLevelResource) : new GenreBlock(this.model.currentLevelResource);
     this.levelBlock.nextViewHandler = (event) => {
       this._nextViewHandler(event);

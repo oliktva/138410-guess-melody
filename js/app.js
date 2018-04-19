@@ -7,16 +7,18 @@ import ResultPresenter from './presenters/result-presenter';
 
 import {getState} from './game-data.js';
 
-let state = null;
+const main = document.querySelector(`.main-container`);
 const results = [];
+
+let state = null;
 
 /**
  * @param {Element} element
  */
 const changeView = (element) => {
   if (element) {
-    const activeScreen = document.querySelector(`.main`);
-    activeScreen.parentElement.replaceChild(element, activeScreen);
+    main.innerHTML = ``;
+    main.appendChild(element);
   }
 };
 
