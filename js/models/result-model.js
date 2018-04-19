@@ -1,18 +1,17 @@
 import Result from '../helpers/result.js';
-import {initialState} from '../game-data.js'
 
 export default class ResultModel {
-  constructor(data) {
+  constructor(data, results) {
     this._data = data;
+    this._results = results;
   }
 
   get result() {
-    const {gamerResults, results} = this._data;
+    const {gamerResults} = this._data;
 
-    const {score, info} = new Result(gamerResults, results);
+    const {score, info} = new Result(gamerResults, this._results);
     if (score !== -1) {
-      this._data.results.push(score);
-      console.log(`result`, initialState)
+      this._results.push(score);
     }
 
     return info;

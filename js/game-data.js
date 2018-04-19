@@ -1,8 +1,9 @@
+import {copyObject} from './helpers/utils.js';
+import {GameLimit} from './helpers/result.js';
+
 /** @constant {string} */
 export const ARTIST = `artist`;
 export const GENRE = `genre`;
-
-import {GameLimit} from './helpers/result.js';
 
 const audio = [
   {
@@ -96,7 +97,7 @@ for (let i = 0; i < 5; i++) {
   resources.push(artist);
 }
 
-export const initialState = Object.freeze({
+const initialState = Object.freeze({
   remainingTime: GameLimit.TIME,
   mistakes: 0,
   gamerResults: [],
@@ -107,11 +108,6 @@ export const initialState = Object.freeze({
   }
 });
 
-export const clearState = (state) => {
-  state.mistakes = initialState.mistakes;
-  state.gamerResults = initialState.gamerResults;
-  state.remainingTime = initialState.remainingTime;
-  state.levels.current = initialState.levels.current;
+export const getState = () => {
+  return copyObject(initialState);
 };
-
-export const state = JSON.parse(JSON.stringify(initialState));

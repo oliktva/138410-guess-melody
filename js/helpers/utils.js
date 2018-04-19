@@ -65,3 +65,11 @@ export const changeView = (element) => {
     activeScreen.parentElement.replaceChild(element, activeScreen);
   }
 };
+
+/**
+ * @param {object} object
+ * @return {object}
+ */
+export const copyObject = (object) => {
+  return JSON.parse(JSON.stringify(object));
+};

@@ -5,7 +5,10 @@ import WelcomePresenter from './presenters/welcome-presenter';
 import LevelPresenter from './presenters/level-presenter';
 import ResultPresenter from './presenters/result-presenter';
 
-import {state, clearState} from './game-data.js';
+import {getState} from './game-data.js';
+
+let state = null;
+const results = [];
 
 /**
  * @param {Element} element
@@ -19,18 +22,26 @@ const changeView = (element) => {
 
 export default class App {
   static showWelcome() {
-    clearState(state);
+    state = getState();
     const welcome = new WelcomePresenter();
     changeView(welcome.element);
   }
 
   static showGame() {
+    if (!state) {
+      state = getState();
+    }
+
     const level = new LevelPresenter(new LevelModel(state));
     changeView(level.element);
   }
 
   static showResult() {
-    const result = new ResultPresenter(new ResultModel(state));
+    if (!state) {
+      state = getState();
+    }
+
+    const result = new ResultPresenter(new ResultModel(state, results));
     changeView(result.element);
   }
 }

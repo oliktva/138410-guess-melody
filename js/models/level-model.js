@@ -1,5 +1,4 @@
 import {GameLimit} from '../helpers/result.js';
-import {initialState} from '../game-data.js'
 
 export default class LevelModel {
   constructor(data) {
@@ -37,7 +36,6 @@ export default class LevelModel {
 
   addGamerResult(result) {
     this._data.gamerResults.push(result);
-    console.log(`level-model`, initialState)
   }
 
   isGameOver() {
