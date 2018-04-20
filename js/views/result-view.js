@@ -38,4 +38,11 @@ export default class ResultView extends AbstractView {
       replayGame.addEventListener(`click`, this.replayHandler);
     }
   }
+
+  clear() {
+    if (this._element) {
+      this._element.querySelector(`.main-replay`).removeEventListener(`click`, this.replayHandler);
+      this._element = null;
+    }
+  }
 }

@@ -35,4 +35,6 @@ export default class AbstractView {
   render() {
     return getElementFromTemplate(this.template);
   }
+
+  clear() {}
 }

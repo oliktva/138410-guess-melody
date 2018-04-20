@@ -8,6 +8,7 @@ export default class ResultPresenter {
     this.view = new ResultView(model.result);
     this.view.replayHandler = () => {
       App.showWelcome();
+      this.view.clear();
     };
   }
 

@@ -33,10 +33,14 @@ export default class WelcomeView extends AbstractView {
   bind(element) {
     if (element && typeof this.startGameHandler === `function`) {
       const startGame = element.querySelector(`.main-play`);
-      startGame.addEventListener(`click`, (evt) => {
-        evt.preventDefault();
-        this.startGameHandler();
-      });
+      startGame.addEventListener(`click`, this.startGameHandler);
+    }
+  }
+
+  clear() {
+    if (this._element) {
+      this._element.querySelector(`.main-play`).removeEventListener(`click`, this.startGameHandler);
+      this._element = null;
     }
   }
 }

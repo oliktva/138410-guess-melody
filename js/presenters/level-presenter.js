@@ -45,6 +45,10 @@ export default class WelcomePresenter {
   _stopGame() {
     this.timer.stop();
     App.showResult();
+    this.levelBlock.clear();
+    this.timerBlock.clear();
+    this.mistakesBlock.clear();
+    this.view.clear();
   }
 
   _nextViewHandler(evt) {
@@ -79,7 +83,6 @@ export default class WelcomePresenter {
   }
 
   _updateLevel() {
-    // this.levelBlock.clear();
     const view = this.model.currentLevelResource.type === ARTIST ? new ArtistBlock(this.model.currentLevelResource) : new GenreBlock(this.model.currentLevelResource);
     view.nextViewHandler = (event) => {
       this._nextViewHandler(event);

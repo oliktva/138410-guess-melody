@@ -32,20 +32,6 @@ export default class TimerBlock extends AbstractView {
     );
   }
 
-  get minutesElement() {
-    this._element = super.element;
-    return this._element.querySelector(`.timer-value-mins`);
-  }
-
-  get secondsElement() {
-    this._element = super.element;
-    return this._element.querySelector(`.timer-value-secs`);
-  }
-
-  get elementSelector() {
-    return `.timer-value`;
-  }
-
   update(time) {
     const {minutes, seconds} = Timer.getFormattedTime(this._remainingTime);
     const {minutes: newMinutes, seconds: newSeconds} = Timer.getFormattedTime(time);
