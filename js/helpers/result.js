@@ -1,13 +1,6 @@
 import {getDeclensionWord} from './utils.js';
+import {GameLimit} from '../game-data.js';
 import Timer from './timer.js';
-
-/** @enum {number} */
-export const GameLimit = {
-  LEVELS_VALUE: 10,
-  MAX_FALSE_ANSWERS_VALUE: 3,
-  FAST_ANSWER_TIME: 30,
-  TIME: 300
-};
 
 const successTextTemplate = `Вы&nbsp;заняли {i}-ое место из&nbsp;{n}.<br>Это лучше, чем у&nbsp;{p}% игроков`;
 const successComparisonTemplate = `За&nbsp;{m} и {s}<br>вы&nbsp;набрали {p} ({f})<br>совершив {e}`;

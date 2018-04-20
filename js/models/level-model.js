@@ -1,4 +1,4 @@
-import {GameLimit} from '../helpers/result.js';
+import {GameLimit} from '../game-data.js';
 
 export default class LevelModel {
   constructor(data) {

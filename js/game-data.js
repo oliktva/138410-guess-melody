@@ -1,9 +1,16 @@
 import {copyObject} from './helpers/utils.js';
-import {GameLimit} from './helpers/result.js';
 
 /** @constant {string} */
 export const ARTIST = `artist`;
 export const GENRE = `genre`;
+
+/** @enum {number} */
+export const GameLimit = {
+  LEVELS_VALUE: 10,
+  MAX_FALSE_ANSWERS_VALUE: 3,
+  FAST_ANSWER_TIME: 30,
+  TIME: 300
+};
 
 const audio = [
   {
