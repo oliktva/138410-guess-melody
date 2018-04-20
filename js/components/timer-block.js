@@ -3,10 +3,11 @@ import AbstractView from '../views/abstract-view.js';
 import Timer from '../helpers/timer.js';
 import {GameLimit} from '../game-data.js';
 
-const dashaaray = 2 * Math.PI * 370;
+const dashaaray = Math.ceil(2 * Math.PI * 370);
+const step = dashaaray / GameLimit.TIME;
 
-const getDashOffset = (minutes, seconds) => {
-  return Math.floor(dashaaray - (minutes * 60 + seconds) * dashaaray / GameLimit.TIME);
+const getDashOffset = (time) => {
+  return Math.floor(dashaaray - time * step);
 };
 
 export default class TimerBlock extends AbstractView {
@@ -26,7 +27,8 @@ export default class TimerBlock extends AbstractView {
           <circle
             cx="390" cy="390" r="370"
             class="timer-line"
-            style="stroke-dashoffset: ${getDashOffset(minutes, seconds)};stroke-dasharray: ${dashaaray};filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center;transition: stroke-dashoffset 1s linear;"></circle>
+            stroke-dasharray="${dashaaray}px"
+            style="transform: rotate(0.1deg); transform-origin: center;transition: stroke-dashoffset 1s linear;"></circle>
         </svg>
         <div class="timer-value">
           <span class="timer-value-mins">${minutes}</span><!--
@@ -53,7 +55,7 @@ export default class TimerBlock extends AbstractView {
       secs.innerText = Timer.addZeroIfNeed(newSeconds);
     }
 
-    line.style.strokeDashoffset = getDashOffset(newMinutes, newSeconds);
+    line.setAttribute(`stroke-dashoffset`, `${getDashOffset(time)}px`);
 
     this._remainingTime = time;
 
