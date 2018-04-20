@@ -12,6 +12,9 @@ import Timer from '../helpers/timer.js';
 import {ARTIST} from '../game-data.js';
 
 export default class WelcomePresenter {
+  /**
+   * @param  {object} model
+   */
   constructor(model) {
     this.model = model;
     this.view = new LevelView();
@@ -32,6 +35,9 @@ export default class WelcomePresenter {
     };
   }
 
+  /**
+   * @return {Element}
+   */
   get element() {
     this.timer.start();
 
@@ -51,6 +57,9 @@ export default class WelcomePresenter {
     this.view.clear();
   }
 
+  /**
+   * @param  {Event} evt
+   */
   _nextViewHandler(evt) {
     evt.preventDefault();
 
@@ -70,6 +79,9 @@ export default class WelcomePresenter {
     }
   }
 
+  /**
+   * @param  {number} remainingTime
+   */
   _updateTimer(remainingTime) {
     if (remainingTime === 0) {
       this._stopGame();
@@ -91,6 +103,9 @@ export default class WelcomePresenter {
     this._updateLevelView(view, this.levelBlock);
   }
 
+  /**
+   * @param  {object} newView
+   */
   _updateLevelView(newView) {
     this.view.element.replaceChild(newView.element, this.levelBlock.element);
     this.levelBlock = newView;

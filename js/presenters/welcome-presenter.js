@@ -12,6 +12,9 @@ export default class WelcomePresenter {
     };
   }
 
+  /**
+   * @return {Element}
+   */
   get element() {
     return this.view.element;
   }

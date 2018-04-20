@@ -1,11 +1,18 @@
 import Result from '../helpers/result.js';
 
 export default class ResultModel {
+  /**
+   * @param  {object} data
+   * @param  {array} results
+   */
   constructor(data, results) {
     this._data = data;
     this._results = results;
   }
 
+  /**
+   * @return {object}
+   */
   get result() {
     const {gamerResults} = this._data;
 

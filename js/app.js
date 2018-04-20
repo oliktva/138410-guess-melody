@@ -1,3 +1,5 @@
+import {copyObject} from './helpers/utils.js';
+
 import LevelModel from './models/level-model.js';
 import ResultModel from './models/result-model.js';
 
@@ -5,7 +7,7 @@ import WelcomePresenter from './presenters/welcome-presenter';
 import LevelPresenter from './presenters/level-presenter';
 import ResultPresenter from './presenters/result-presenter';
 
-import {getState} from './game-data.js';
+import {initialState} from './game-data.js';
 
 const main = document.querySelector(`.main-container`);
 const results = [];
@@ -24,14 +26,14 @@ const changeView = (element) => {
 
 export default class App {
   static showWelcome() {
-    state = getState();
+    state = copyObject(initialState);
     const welcome = new WelcomePresenter();
     changeView(welcome.element);
   }
 
   static showGame() {
     if (!state) {
-      state = getState();
+      state = copyObject(initialState);
     }
 
     const level = new LevelPresenter(new LevelModel(state));
@@ -40,7 +42,7 @@ export default class App {
 
   static showResult() {
     if (!state) {
-      state = getState();
+      state = copyObject(initialState);
     }
 
     const result = new ResultPresenter(new ResultModel(state, results));

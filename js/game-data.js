@@ -1,5 +1,3 @@
-import {copyObject} from './helpers/utils.js';
-
 /** @constant {string} */
 export const ARTIST = `artist`;
 export const GENRE = `genre`;
@@ -104,7 +102,7 @@ for (let i = 0; i < 5; i++) {
   resources.push(genre);
 }
 
-const initialState = Object.freeze({
+export const initialState = Object.freeze({
   remainingTime: GameLimit.TIME,
   mistakes: 0,
   gamerResults: [],
@@ -114,7 +112,3 @@ const initialState = Object.freeze({
     resources
   }
 });
-
-export const getState = () => {
-  return copyObject(initialState);
-};

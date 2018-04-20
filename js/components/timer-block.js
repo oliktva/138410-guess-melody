@@ -7,7 +7,7 @@ const dashaaray = Math.ceil(2 * Math.PI * 370);
 const step = dashaaray / GameLimit.TIME;
 
 const getDashOffset = (time) => {
-  return Math.floor(dashaaray - time * step);
+  return Math.ceil(dashaaray - time * step);
 };
 
 export default class TimerBlock extends AbstractView {
@@ -39,6 +39,9 @@ export default class TimerBlock extends AbstractView {
     );
   }
 
+  /**
+   * @param  {number} time
+   */
   update(time) {
     const {minutes, seconds} = Timer.getFormattedTime(this._remainingTime);
     const {minutes: newMinutes, seconds: newSeconds} = Timer.getFormattedTime(time);

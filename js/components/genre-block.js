@@ -43,36 +43,37 @@ export default class GenreLevelView extends AbstractView {
     );
   }
 
-  get elementSelector() {
-    return `.main-wrap`;
-  }
-
+  /** @return {string} */
   get gamerAnswers() {
     const answers = Array.from(document.querySelectorAll(`.genre-answer input:checked`));
     return answers.map((answer) => answer.value.substr(-1) - 1);
   }
 
-  _activateSubmitHandler(evt, form, answer) {
+  /**
+   * @param  {Event} evt
+   */
+  _activateSubmitHandler(evt) {
     const element = evt.target;
 
     if (element.tagName.toLowerCase() === `input`) {
-      if (element.checked || form.querySelectorAll(`.genre-answer input:checked`).length) {
-        answer.disabled = false;
+      if (element.checked || this.element.querySelectorAll(`.genre-answer input:checked`).length) {
+        this.element.querySelector(`.genre-answer-send`).disabled = false;
       } else {
-        answer.disabled = true;
+        this.element.querySelector(`.genre-answer-send`).disabled = true;
       }
     }
   }
 
   nextViewHandler() {}
 
+  /**
+   * @param  {Element} element
+   */
   bind(element) {
     if (element && typeof this.nextViewHandler === `function`) {
-      const answerForm = element.querySelector(`form.genre`);
-      const answer = element.querySelector(`.genre-answer-send`);
 
-      answerForm.addEventListener(`change`, (evt) => this._activateSubmitHandler(evt, answerForm, answer));
-      answer.addEventListener(`click`, this.nextViewHandler);
+      element.querySelector(`form.genre`).addEventListener(`change`, this._activateSubmitHandler);
+      element.querySelector(`.genre-answer-send`).addEventListener(`click`, this.nextViewHandler);
     }
   }
 

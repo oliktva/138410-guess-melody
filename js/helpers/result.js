@@ -26,6 +26,10 @@ const GameResult = {
 };
 
 export default class Result {
+  /**
+   * @param  {Array} answers
+   * @param  {Array} results
+   */
   constructor(answers, results) {
     this._answers = answers;
     this._fastAnswers = 0;
@@ -34,14 +38,21 @@ export default class Result {
     this._info = this._getGameResult(results);
   }
 
+  /** @return {number} */
   get score() {
     return this._score;
   }
 
+  /** @return {object} */
   get info() {
     return this._info;
   }
 
+  /**
+   * @param  {object} answer
+   * @param  {number} index
+   * @return {number}
+   */
   _getTime(answer, index) {
     const prev = index ? this._answers[index - 1].time : GameLimit.TIME;
     return prev - answer.time;
@@ -73,6 +84,9 @@ export default class Result {
     }, 0);
   }
 
+  /**
+   * @return {number}
+   */
   _getGameTime() {
     return GameLimit.TIME - this._answers[this._answers.length - 1].time;
   }

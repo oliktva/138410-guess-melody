@@ -20,6 +20,9 @@ export default class AbstractView {
     return ``;
   }
 
+  /**
+   * @return {Element}
+   */
   get element() {
     if (this._element) {
       return this._element;

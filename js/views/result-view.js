@@ -2,6 +2,9 @@ import AbstractView from './abstract-view.js';
 import HeaderBlock from '../components/header-block.js';
 
 export default class ResultView extends AbstractView {
+  /**
+   * @param  {Object} props
+   */
   constructor(props) {
     super();
     this._props = props;

@@ -1,10 +1,16 @@
 import {GameLimit} from '../game-data.js';
 
 export default class LevelModel {
+  /**
+   * @param  {object} data
+   */
   constructor(data) {
     this._data = data;
   }
 
+  /**
+   * @return  {number}
+   */
   get remainingTime() {
     return this._data.remainingTime;
   }
@@ -13,6 +19,9 @@ export default class LevelModel {
     this._data.remainingTime--;
   }
 
+  /**
+   * @return  {number}
+   */
   get mistakes() {
     return this._data.mistakes;
   }
@@ -21,10 +30,16 @@ export default class LevelModel {
     this._data.mistakes++;
   }
 
+  /**
+   * @return  {number}
+   */
   get currentLevelValue() {
     return this._data.levels.current;
   }
 
+  /**
+   * @return  {object}
+   */
   get currentLevelResource() {
     const {levels: {current, resources}} = this._data;
     return resources[current];
@@ -38,6 +53,9 @@ export default class LevelModel {
     this._data.gamerResults.push(result);
   }
 
+  /**
+   * @return  {boolean}
+   */
   isGameOver() {
     return this._data.mistakes === GameLimit.MAX_FALSE_ANSWERS_VALUE || this._data.levels.current === GameLimit.LEVELS_VALUE - 1;
   }

@@ -42,10 +42,7 @@ export default class ArtistLevelView extends AbstractView {
     );
   }
 
-  get elementSelector() {
-    return `.main-wrap`;
-  }
-
+  /** @return {Array} */
   get gamerAnswers() {
     const answer = document.querySelector(`.main-answer-wrapper input:checked`);
     return [answer.value.substr(-1) - 1];
@@ -53,6 +50,9 @@ export default class ArtistLevelView extends AbstractView {
 
   nextViewHandler() {}
 
+  /**
+   * @param  {Element} element
+   */
   bind(element) {
     if (element && typeof this.nextViewHandler === `function`) {
       const answerForm = element.querySelector(`form.main-list`);
