@@ -6,7 +6,7 @@ import {GameLimit} from '../game-data.js';
 const dashaaray = 2 * Math.PI * 370;
 
 const getDashOffset = (minutes, seconds) => {
-  return dashaaray - (minutes * 60 + seconds) * dashaaray / GameLimit.TIME;
+  return Math.floor(dashaaray - (minutes * 60 + seconds) * dashaaray / GameLimit.TIME);
 };
 
 export default class TimerBlock extends AbstractView {
@@ -40,6 +40,7 @@ export default class TimerBlock extends AbstractView {
   update(time) {
     const {minutes, seconds} = Timer.getFormattedTime(this._remainingTime);
     const {minutes: newMinutes, seconds: newSeconds} = Timer.getFormattedTime(time);
+    const timer = this.element.querySelector(`.timer-value`);
     const mins = this.element.querySelector(`.timer-value-mins`);
     const secs = this.element.querySelector(`.timer-value-secs`);
     const line = this.element.querySelector(`.timer circle`);
@@ -55,6 +56,10 @@ export default class TimerBlock extends AbstractView {
     line.style.strokeDashoffset = getDashOffset(newMinutes, newSeconds);
 
     this._remainingTime = time;
+
+    if (time < 30 && !timer.classList.value.includes(`timer-value--finished`)) {
+      timer.classList.add(`timer-value--finished`);
+    }
   }
 
   clear() {
