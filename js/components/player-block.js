@@ -35,9 +35,10 @@ export default class PlayerBlock extends AbstractView {
     );
   }
 
-  _stopOther() {
+  /** @param {Element} current */
+  _stopOther(current) {
     Array.from(document.querySelectorAll(`audio`)).forEach((audio) => {
-      if (!audio.paused) {
+      if (!(audio === current || audio.paused)) {
         audio.pause();
         audio.currentTime = 0;
         toggleButton(audio.nextElementSibling);
@@ -49,7 +50,7 @@ export default class PlayerBlock extends AbstractView {
   _playerHandler(evt) {
     evt.preventDefault();
     const audio = this._element.querySelector(`.player audio`);
-    this._stopOther();
+    this._stopOther(audio);
 
     if (this._isPlaying) {
       audio.pause();
