@@ -45,6 +45,7 @@ export default class PlayerBlock extends AbstractView {
     });
   }
 
+  /** @param {Event} evt */
   _playerHandler(evt) {
     evt.preventDefault();
     const audio = this._element.querySelector(`.player audio`);
@@ -59,6 +60,7 @@ export default class PlayerBlock extends AbstractView {
     this._isPlaying = !this._isPlaying;
   }
 
+  /** @param {Element} element */
   bind(element) {
     element.querySelector(`.player-control`).addEventListener(`click`, (evt) => this._playerHandler(evt));
   }
