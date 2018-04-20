@@ -15,7 +15,7 @@ export default class WelcomePresenter {
   /**
    * @return {Element}
    */
-  get element() {
+  get screen() {
     return this.view.element;
   }
 }

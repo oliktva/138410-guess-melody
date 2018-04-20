@@ -27,19 +27,30 @@ export default class ArtistLevelView extends AbstractView {
 
   /** @return {string} */
   get template() {
-    const {question: {title, audio}, answers} = this._props;
-
-    const player = new PlayerBlock(audio, true);
+    const {question: {title}, answers} = this._props;
 
     return (
       `<div class="main-wrap">
           <h2 class="title main-title">${title}</h2>
-          ${player.template}
+          <div class="player-container"></div>
           <form class="main-list">
             ${answers.map((answer, index) => getAnswerTemplate(answer, index + 1)).join(``)}
           </form>
         </div>`
     );
+  }
+
+  /** @return {Element} */
+  get element() {
+    if (!this._element) {
+      this._element = super.element;
+
+      const {audio} = this._props.question;
+      const player = new PlayerBlock(audio, true);
+
+      this._element.querySelector(`.player-container`).appendChild(player.element);
+    }
+    return this._element;
   }
 
   /** @return {Array} */

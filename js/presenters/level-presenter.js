@@ -11,7 +11,7 @@ import Timer from '../helpers/timer.js';
 
 import {ARTIST} from '../game-data.js';
 
-export default class WelcomePresenter {
+export default class LevelPresenter {
   /**
    * @param  {object} model
    */
@@ -38,7 +38,7 @@ export default class WelcomePresenter {
   /**
    * @return {Element}
    */
-  get element() {
+  get screen() {
     this.timer.start();
 
     this.view.element.appendChild(this.timerBlock.element);

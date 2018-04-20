@@ -18,7 +18,7 @@ export default class ResultPresenter {
   /**
    * @return {Element}
    */
-  get element() {
+  get screen() {
     return this.view.element;
   }
 }

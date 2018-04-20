@@ -28,7 +28,7 @@ export default class App {
   static showWelcome() {
     state = copyObject(initialState);
     const welcome = new WelcomePresenter();
-    changeView(welcome.element);
+    changeView(welcome.screen);
   }
 
   static showGame() {
@@ -37,7 +37,7 @@ export default class App {
     }
 
     const level = new LevelPresenter(new LevelModel(state));
-    changeView(level.element);
+    changeView(level.screen);
   }
 
   static showResult() {
@@ -46,6 +46,6 @@ export default class App {
     }
 
     const result = new ResultPresenter(new ResultModel(state, results));
-    changeView(result.element);
+    changeView(result.screen);
   }
 }

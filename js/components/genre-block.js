@@ -10,11 +10,9 @@ const ACTION = `Ответить`;
  * @return {string}
  */
 const getAnswerTemplate = (answer, index) => {
-  const playerView = new PlayerBlock(answer.audio);
-
   return (
     `<div class="genre-answer">
-      ${playerView.template}
+      <div class="player-container-${index}"></div>
       <input type="checkbox" name="answer" value="answer-${index}" id="a-${index}">
       <label class="genre-answer-check" for="a-${index}"></label>
     </div>`
@@ -49,6 +47,20 @@ export default class GenreLevelView extends AbstractView {
     return answers.map((answer) => answer.value.substr(-1) - 1);
   }
 
+  /** @return {Element} */
+  get element() {
+    if (!this._element) {
+      this._element = super.element;
+
+      const {answers} = this._props;
+      answers.forEach(({audio}, i) => {
+        const player = new PlayerBlock(audio);
+        this._element.querySelector(`.player-container-${i + 1}`).appendChild(player.element);
+      });
+    }
+    return this._element;
+  }
+
   /**
    * @param  {Event} evt
    */
@@ -72,7 +84,7 @@ export default class GenreLevelView extends AbstractView {
   bind(element) {
     if (element && typeof this.nextViewHandler === `function`) {
 
-      element.querySelector(`form.genre`).addEventListener(`change`, this._activateSubmitHandler);
+      element.querySelector(`form.genre`).addEventListener(`change`, (evt) => this._activateSubmitHandler(evt));
       element.querySelector(`.genre-answer-send`).addEventListener(`click`, this.nextViewHandler);
     }
   }
