@@ -1,29 +1,29 @@
 import {expect} from 'chai';
 
 import {getRandom, getDeclensionWord} from './utils.js';
-import {getScore, getGameResult} from './result.js';
+import Result from './result.js';
 
 describe(`result`, () => {
-  describe(`getScore`, () => {
-    let scoreData = [];
+  let scoreData = [];
 
+  describe(`score`, () => {
     beforeEach(() => {
       scoreData = [];
       for (let i = 0; i < 10; i++) {
-        scoreData.push({result: true, time: getRandom(0, 30)});
+        scoreData.push({result: true, time: 300 - getRandom(9 * i, 10 * i)});
       }
     });
 
     it(`should return -1 when the answers value < 10 or false answers have length 3`, () => {
       const expected = -1;
-      const actual1 = getScore([]);
-      const actual2 = getScore(scoreData.slice(0, 3));
-      const actual3 = getScore(scoreData.slice(0, 9));
+      const actual1 = (new Result([])).score;
+      const actual2 = (new Result(scoreData.slice(0, 3))).score;
+      const actual3 = (new Result(scoreData.slice(0, 9))).score;
 
       scoreData[3].result = false;
       scoreData[5].result = false;
       scoreData[9].result = false;
-      const actual4 = getScore(scoreData);
+      const actual4 = (new Result(scoreData)).score;
 
       expect(actual1).to.equal(expected);
       expect(actual2).to.equal(expected);
@@ -33,7 +33,7 @@ describe(`result`, () => {
 
     it(`should return 20 when the answers are true and fast`, () => {
       const expected = 20;
-      const actual = getScore(scoreData);
+      const actual = (new Result(scoreData)).score;
 
       expect(actual).to.equal(expected);
     });
@@ -41,84 +41,75 @@ describe(`result`, () => {
     it(`should return correct value when the all answers are true and some answers not fast`, () => {
       scoreData[0].time = 60;
       const expected1 = 19;
-      const actual1 = getScore(scoreData);
+      const actual1 = (new Result(scoreData)).score;
 
-      scoreData[1].time = 31;
-      scoreData[9].time = 45;
+      scoreData[8].time = 36;
+      scoreData[9].time = 5;
       const expected2 = 17;
-      const actual2 = getScore(scoreData);
-
-      scoreData[2].time = 45;
-      scoreData[8].time = 76;
-      const expected3 = 15;
-      const actual3 = getScore(scoreData);
+      const actual2 = (new Result(scoreData)).score;
 
       expect(actual1).to.equal(expected1);
       expect(actual2).to.equal(expected2);
-      expect(actual3).to.equal(expected3);
     });
 
     it(`should return correct value when the some answers are not true`, () => {
       scoreData[0].result = false;
       const expected1 = 16;
-      const actual1 = getScore(scoreData);
+      const actual1 = (new Result(scoreData)).score;
 
       scoreData[1].result = false;
       scoreData[9].time = 60;
       const expected2 = 11;
-      const actual2 = getScore(scoreData);
+      const actual2 = (new Result(scoreData)).score;
 
       expect(actual1).to.equal(expected1);
       expect(actual2).to.equal(expected2);
     });
   });
 
-  describe(`getGameResult`, () => {
-    const otherResultsData = [13, 17, 16, 19, 11, 15, 15, 1, 3];
-    let score;
-    let mistakes;
-
+  describe(`info`, () => {
     const successResult = `Вы&nbsp;заняли {i}-ое место из&nbsp;{g}&nbsp;игроков.<br>Это лучше, чем у&nbsp;{p}% игроков`;
     const timeOverResult = `Время вышло!<br>Вы&nbsp;не&nbsp;успели отгадать все мелодии`;
     const attemptsEndedResult = `У&nbsp;вас закончились все попытки.<br>Ничего, повезёт в&nbsp;следующий раз!`;
 
     beforeEach(() => {
-      score = 20;
-      mistakes = 1;
+      scoreData = [];
+      for (let i = 0; i < 10; i++) {
+        scoreData.push({result: true, time: 300 - getRandom(9 * i, 10 * i)});
+      }
     });
 
     it(`should return timeOverResult when the own result equals -1 and time equals 0`, () => {
-      score = -1;
-
-      const actual = getGameResult({score, mistakes}, otherResultsData).text;
+      const actual = (new Result(scoreData.slice(0, 3), [])).info.text;
 
       expect(actual).to.equal(timeOverResult);
     });
 
     it(`should return attemptsEndedResult when the own result equals -1 and lives equal 0`, () => {
-      score = -1;
-      mistakes = 3;
-
-      const actual = getGameResult({score, mistakes}, otherResultsData).text;
+      scoreData[3].result = false;
+      scoreData[5].result = false;
+      scoreData[9].result = false;
+      const actual = (new Result(scoreData, [])).info.text;
 
       expect(actual).to.equal(attemptsEndedResult);
     });
 
     it(`should return successResult when the own result is success`, () => {
+      const otherResultsData = [13, 17, 16, 19, 11, 15, 15, 1, 3];
+      let scoreData1 = [];
+      let scoreData2 = [];
+      for (let i = 0; i < 10; i++) {
+        scoreData1.push({result: true, time: 300 - (i + 1) * 10});
+        scoreData2.push({result: true, time: 300 - (i + 1) * 30});
+      }
       const expected1 = successResult.replace(`{i}`, 1).replace(`{g}`, 10).replace(`{p}`, 90);
-      const expected2 = successResult.replace(`{i}`, 8).replace(`{g}`, 10).replace(`{p}`, 20);
-      const expected3 = successResult.replace(`{i}`, 2).replace(`{g}`, 10).replace(`{p}`, 80);
-      const expected4 = successResult.replace(`{i}`, 1).replace(`{g}&nbsp;игроков`, `1&nbsp;игрока`).replace(`{p}`, 0);
+      const expected2 = successResult.replace(`{i}`, 1).replace(`{g}&nbsp;игроков`, `1&nbsp;игрока`).replace(`{p}`, 100);
 
-      const actual1 = getGameResult({score, mistakes}, otherResultsData).text;
-      const actual2 = getGameResult({score: 9, mistakes}, otherResultsData).text;
-      const actual3 = getGameResult({score: 18, mistakes}, otherResultsData).text;
-      const actual4 = getGameResult({score: 18, mistakes}, []).text;
+      const actual1 = (new Result(scoreData, otherResultsData)).info.text;
+      const actual2 = (new Result(scoreData, [])).info.text;
 
       expect(actual1).to.equal(expected1);
       expect(actual2).to.equal(expected2);
-      expect(actual3).to.equal(expected3);
-      expect(actual4).to.equal(expected4);
     });
   });
 

@@ -1,17 +1,12 @@
 import {getDeclensionWord} from './utils.js';
-
-/** @enum {number} */
-export const GameLimit = {
-  LEVELS_VALUE: 10,
-  MAX_FALSE_ANSWERS_VALUE: 3,
-  FAST_ANSWER_TIME: 30
-};
+import {GameLimit} from '../game-data.js';
+import Timer from './timer.js';
 
 const successTextTemplate = `Вы&nbsp;заняли {i}-ое место из&nbsp;{n}.<br>Это лучше, чем у&nbsp;{p}% игроков`;
-const successComparisonTemplate = `За&nbsp;{m} и {s}<br>вы&nbsp;набрали {p} ({f} быстрых)<br>совершив {e}`;
+const successComparisonTemplate = `За&nbsp;{m} и {s}<br>вы&nbsp;набрали {p} ({f})<br>совершив {e}`;
 
 /** @enum {object} */
-export const GameResult = {
+const GameResult = {
   SUCCESS: {
     title: `Вы настоящий меломан!`,
     text: ``,
@@ -30,72 +25,127 @@ export const GameResult = {
   }
 };
 
-/**
- * @param {Array} answers
- * @return {number}
- */
-export const getScore = (answers) => {
-  let falseAnswers = answers.filter((answer) => !answer.result);
+export default class Result {
+  /**
+   * @param  {Array} answers
+   * @param  {Array} results
+   */
+  constructor(answers, results) {
+    this._answers = answers;
+    this._fastAnswers = 0;
 
-  if (answers.length < GameLimit.LEVELS_VALUE || falseAnswers.length === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
-    return -1;
+    this._score = this._calculateScore();
+    this._info = this._getGameResult(results);
   }
 
-  return answers.reduce((score, answer) => {
-    if (answer.result) {
-      return answer.time < GameLimit.FAST_ANSWER_TIME ? score + 2 : score + 1;
-    }
-
-    return score - 2;
-  }, 0);
-};
-
-/**
- * @param {object} ownResult
- * @param {Array} otherScores
- * @return {object}
- */
-export const getGameResult = (ownResult, otherScores = []) => {
-  if (ownResult.score === -1) {
-    if (ownResult.mistakes === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
-      return GameResult.ATTEMPTS_ENDED;
-    }
-    return GameResult.TIME_OVER;
+  /** @return {number} */
+  get score() {
+    return this._score;
   }
 
-  let scores = otherScores.slice();
-  scores.push(ownResult.score);
-  scores = scores.sort((a, b) => a - b);
+  /** @return {object} */
+  get info() {
+    return this._info;
+  }
 
-  const position = scores.indexOf(ownResult.score);
-  const place = scores.length - position;
-  const percent = Math.floor((position / scores.length) * 100);
-  const gamers = getDeclensionWord(
-      scores.length, {one: `игрока`, other: `игроков`}
-  );
-  const minutes = getDeclensionWord(
-      3, {one: `минуту`, few: `минуты`, many: `минут`, other: `минуты`}
-  );
-  const seconds = getDeclensionWord(
-      1, {one: `секунду`, few: `секунды`, many: `секунд`, other: `секунды`}
-  );
-  const points = getDeclensionWord(
-      ownResult.score, {one: `балл`, few: `балла`, many: `баллов`, other: `балла`}
-  );
-  const mistakes = getDeclensionWord(
-      2, {one: `ошибку`, few: `ошибки`, many: `ошибок`, other: `ошибки`}
-  );
+  /**
+   * @param  {object} answer
+   * @param  {number} index
+   * @return {number}
+   */
+  _getTime(answer, index) {
+    const prev = index ? this._answers[index - 1].time : GameLimit.TIME;
+    return prev - answer.time;
+  }
 
-  GameResult.SUCCESS.text = successTextTemplate.replace(`{i}`, place)
-      .replace(`{n}`, `${scores.length}&nbsp;${gamers}`)
-      .replace(`{p}`, percent);
+  /**
+   * @param {Array} answers
+   * @return {number}
+   */
+  _calculateScore() {
+    this._mistakes = this._answers.filter((answer) => !answer.result).length;
 
-  GameResult.SUCCESS.comparison = successComparisonTemplate.replace(`{i}`, place)
-      .replace(`{m}`, `${3}&nbsp;${minutes}`)
-      .replace(`{s}`, `${1}&nbsp;${seconds}`)
-      .replace(`{p}`, `${ownResult.score}&nbsp;${points}`)
-      .replace(`{f}`, `8`)
-      .replace(`{e}`, `${2}&nbsp;${mistakes}`);
+    if (this._answers.length < GameLimit.LEVELS_VALUE || this._mistakes === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
+      return -1;
+    }
 
-  return GameResult.SUCCESS;
-};
+    return this._answers.reduce((score, answer, index) => {
+      if (answer.result) {
+        const time = this._getTime(answer, index);
+        if (time <= GameLimit.FAST_ANSWER_TIME) {
+          this._fastAnswers++;
+          return score + 2;
+        }
+
+        return score + 1;
+      }
+
+      return score - 2;
+    }, 0);
+  }
+
+  /**
+   * @return {number}
+   */
+  _getGameTime() {
+    return GameLimit.TIME - this._answers[this._answers.length - 1].time;
+  }
+
+  /**
+   * @param {Array} otherScores
+   * @return {object}
+   */
+  _getGameResult(otherScores = []) {
+    if (typeof this._score !== `number`) {
+      return null;
+    }
+
+    if (this._score === -1) {
+      if (this._mistakes === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
+        return GameResult.ATTEMPTS_ENDED;
+      }
+      return GameResult.TIME_OVER;
+    }
+
+    let scores = otherScores.slice();
+    scores.push(this._score);
+    scores = scores.sort((a, b) => a - b);
+
+    const position = scores.indexOf(this._score);
+    const place = scores.length - position;
+    const percent = otherScores.length ? Math.floor((position / scores.length) * 100) : 100;
+    const {minutes, seconds} = Timer.getFormattedTime(this._getGameTime());
+
+    const gamersWord = getDeclensionWord(
+        scores.length, {one: `игрока`, other: `игроков`}
+    );
+    const minutesWord = getDeclensionWord(
+        minutes, {one: `минуту`, few: `минуты`, many: `минут`, other: `минуты`}
+    );
+    const secondsWord = getDeclensionWord(
+        seconds, {one: `секунду`, few: `секунды`, many: `секунд`, other: `секунды`}
+    );
+    const pointsWord = getDeclensionWord(
+        this._score, {one: `балл`, few: `балла`, many: `баллов`, other: `балла`}
+    );
+    const mistakesWord = getDeclensionWord(
+        this._mistakes, {one: `ошибку`, few: `ошибки`, many: `ошибок`, other: `ошибки`}
+    );
+    const fastWord = getDeclensionWord(
+        this._fastAnswers, {one: `быстрый`, other: `быстрых`}
+    );
+
+    GameResult.SUCCESS.text = successTextTemplate.replace(`{i}`, place)
+        .replace(`{n}`, `${scores.length}&nbsp;${gamersWord}`)
+        .replace(`{p}`, percent);
+
+    GameResult.SUCCESS.comparison = successComparisonTemplate.replace(`{i}`, place)
+        .replace(`{m}`, `${minutes}&nbsp;${minutesWord}`)
+        .replace(`{s}`, `${seconds}&nbsp;${secondsWord}`)
+        .replace(`{p}`, `${this._score}&nbsp;${pointsWord}`)
+        .replace(`{f}`, `${this._fastAnswers}&nbsp;${fastWord}`)
+        .replace(`{e}`, `${this._mistakes}&nbsp;${mistakesWord}`);
+
+    return GameResult.SUCCESS;
+  }
+}

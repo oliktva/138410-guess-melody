@@ -1,4 +1,12 @@
-import {getElementFromTemplate} from '../helpers/utils.js';
+/**
+ * @param {string} markup
+ * @return {Element}
+ */
+export const getElementFromTemplate = function (markup) {
+  let template = document.createElement(`template`);
+  template.innerHTML = markup.trim();
+  return template.content.firstChild;
+};
 
 export default class AbstractView {
   constructor() {
@@ -12,6 +20,9 @@ export default class AbstractView {
     return ``;
   }
 
+  /**
+   * @return {Element}
+   */
   get element() {
     if (this._element) {
       return this._element;
@@ -27,4 +38,6 @@ export default class AbstractView {
   render() {
     return getElementFromTemplate(this.template);
   }
+
+  clear() {}
 }

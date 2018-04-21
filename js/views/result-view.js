@@ -2,9 +2,12 @@ import AbstractView from './abstract-view.js';
 import HeaderBlock from '../components/header-block.js';
 
 export default class ResultView extends AbstractView {
-  constructor(result) {
+  /**
+   * @param  {Object} props
+   */
+  constructor(props) {
     super();
-    this.result = result;
+    this._props = props;
   }
 
   /** @return {string} */
@@ -14,7 +17,7 @@ export default class ResultView extends AbstractView {
       text,
       comparison,
       action
-    } = this.result;
+    } = this._props;
 
     const header = new HeaderBlock();
 
@@ -36,6 +39,13 @@ export default class ResultView extends AbstractView {
     if (element && typeof this.replayHandler === `function`) {
       const replayGame = element.querySelector(`.main-replay`);
       replayGame.addEventListener(`click`, this.replayHandler);
+    }
+  }
+
+  clear() {
+    if (this._element) {
+      this._element.querySelector(`.main-replay`).removeEventListener(`click`, this.replayHandler);
+      this._element = null;
     }
   }
 }

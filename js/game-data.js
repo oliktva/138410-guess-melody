@@ -2,6 +2,14 @@
 export const ARTIST = `artist`;
 export const GENRE = `genre`;
 
+/** @enum {number} */
+export const GameLimit = {
+  LEVELS_VALUE: 10,
+  MAX_FALSE_ANSWERS_VALUE: 3,
+  FAST_ANSWER_TIME: 30,
+  TIME: 300
+};
+
 const audio = [
   {
     artist: `Kevin MacLeod`,
@@ -94,11 +102,8 @@ for (let i = 0; i < 5; i++) {
   resources.push(genre);
 }
 
-const initialState = {
-  remainingTime: {
-    minutes: 5,
-    seconds: 0
-  },
+export const initialState = Object.freeze({
+  remainingTime: GameLimit.TIME,
   mistakes: 0,
   gamerResults: [],
   results: [],
@@ -106,6 +111,4 @@ const initialState = {
     current: 0,
     resources
   }
-};
-
-export const state = Object.assign(initialState);
+});
