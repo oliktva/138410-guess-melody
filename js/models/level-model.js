@@ -68,7 +68,7 @@ export default class LevelModel {
     const {answers} = this.currentLevelResource;
 
     return answers.reduce((result, answer, index) => {
-      if (answer.correct) {
+      if (answer.isCorrect) {
         return result && answersIndeces.includes(index);
       } else {
         return result && !answersIndeces.includes(index);

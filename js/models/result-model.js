@@ -5,9 +5,8 @@ export default class ResultModel {
    * @param  {object} data
    * @param  {array} results
    */
-  constructor(data, results) {
+  constructor(data) {
     this._data = data;
-    this._results = results;
   }
 
   /**
@@ -16,9 +15,9 @@ export default class ResultModel {
   get result() {
     const {gamerResults} = this._data;
 
-    const {score, info} = new Result(gamerResults, this._results);
+    const {score, info} = new Result(gamerResults, this._data.results);
     if (score !== -1) {
-      this._results.push(score);
+      this._data.results.push(score);
     }
 
     return info;

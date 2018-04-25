@@ -1,4 +1,4 @@
-import {copyObject} from './helpers/utils.js';
+import Loader from './loader.js';
 
 import LevelModel from './models/level-model.js';
 import ResultModel from './models/result-model.js';
@@ -7,11 +7,9 @@ import WelcomePresenter from './presenters/welcome-presenter';
 import LevelPresenter from './presenters/level-presenter';
 import ResultPresenter from './presenters/result-presenter';
 
-import {initialState} from './game-data.js';
+import {getState} from './game-data.js';
 
 const main = document.querySelector(`.main-container`);
-const results = [];
-
 let state = null;
 
 /**
@@ -26,26 +24,38 @@ const changeView = (element) => {
 
 export default class App {
   static showWelcome() {
-    state = copyObject(initialState);
+    state = getState();
     const welcome = new WelcomePresenter();
+    welcome.loading = true;
     changeView(welcome.screen);
+
+    Loader.loadData()
+        .then((response) => {
+          state.levels.resources = response.resources;
+        }).
+        then(() => {
+          welcome.loading = false;
+          changeView(welcome.screen);
+        });
   }
 
   static showGame() {
-    if (!state) {
-      state = copyObject(initialState);
-    }
-
     const level = new LevelPresenter(new LevelModel(state));
     changeView(level.screen);
   }
 
   static showResult() {
-    if (!state) {
-      state = copyObject(initialState);
-    }
+    const result = new ResultPresenter(new ResultModel(state));
+    result.loading = true;
 
-    const result = new ResultPresenter(new ResultModel(state, results));
     changeView(result.screen);
+    Loader.loadResults()
+        .then((response) => {
+          state.results = response;
+        })
+        .then(() => {
+          result.loading = false;
+          changeView(result.screen);
+        });
   }
 }
