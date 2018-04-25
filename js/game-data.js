@@ -51,7 +51,24 @@ const initialState = Object.freeze({
   }
 });
 
+const state = copyObject(initialState);
+
+export const updateState = (key, data) => {
+  if (key === `resources`) {
+    state.levels.resources = data;
+  }
+  if (key === `results`) {
+    state.results = data;
+  }
+};
+
 export const getState = () => {
-  const state = copyObject(initialState);
   return state;
+};
+
+export const clearState = () => {
+  state.remainingTime = GameLimit.TIME;
+  state.mistakes = 0;
+  state.gamerResults = [];
+  state.levels.current = 0;
 };

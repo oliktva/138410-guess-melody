@@ -10,7 +10,20 @@ export default class LoaderView extends AbstractView {
 
     return (
       `<section class="main main--loader">
-        <div>LOADING</div>
+        <div class="loader">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </section>`
     );
   }

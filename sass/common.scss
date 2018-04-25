@@ -69,4 +69,39 @@ body {
   color: #f00;
 }
 
+.loader {
+  font-size: 0;
+  span {
+    background-color: #fff;
+    content: '';
+    display: inline-block;
+    height: 64px;
+    width: 6px;
+    margin: 0 3px;
+    animation: move-up-and-down 0.5s infinite alternate;
+    transform-origin: bottom left;
+  }
+}
+
+$delay: (.4s, .2s, .1s, .2s, .4s, .1s, .2s, .3s, .4s, .2s, .4s, .1s, .2s, .4s, .3s);
+$bgcolors: (#ff8930, #ff8930, #ff8930, #ff9749, #ff9749, #ff9749, #ffa663, #ffa663, #ffa663, #ffb57c, #ffb57c, #ffb57c, #ffc396, #ffc396, #ffc396);
+
+@for $i from 1 through length($delay) {
+  span:nth-of-type(#{$i}) {
+    animation-delay: nth($delay, $i);
+    background-color: nth($bgcolors, $i);
+  }
+}
+
+@keyframes move-up-and-down {
+  0% {
+    opacity: .3;
+    transform: scaleY(.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
 @import "player/player";
