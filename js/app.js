@@ -9,37 +9,25 @@ import ResultPresenter from './presenters/result-presenter';
 
 import {getState, clearState} from './game-data.js';
 
-const main = document.querySelector(`.main-container`);
-
-/**
- * @param {Element} element
- */
-const changeView = (element) => {
-  if (element) {
-    main.innerHTML = ``;
-    main.appendChild(element);
-  }
-};
-
 export default class App {
   static showLoader() {
     const loader = new LoaderView();
-    changeView(loader.element);
+    loader.show();
   }
 
   static showWelcome() {
     clearState();
     const welcome = new WelcomePresenter(getState());
-    changeView(welcome.screen);
+    welcome.show();
   }
 
   static showGame() {
     const level = new LevelPresenter(new LevelModel(getState()));
-    changeView(level.screen);
+    level.show();
   }
 
   static showResult() {
     const result = new ResultPresenter(new ResultModel(getState()));
-    changeView(result.screen);
+    result.show();
   }
 }

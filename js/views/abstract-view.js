@@ -1,8 +1,10 @@
+import {changeView} from '../helpers/utils.js';
+
 /**
  * @param {string} markup
  * @return {Element}
  */
-export const getElementFromTemplate = function (markup) {
+const getElementFromTemplate = function (markup) {
   let template = document.createElement(`template`);
   template.innerHTML = markup.trim();
   return template.content.firstChild;
@@ -37,6 +39,10 @@ export default class AbstractView {
   /** @return {Element} */
   render() {
     return getElementFromTemplate(this.template);
+  }
+
+  show() {
+    changeView(this.element);
   }
 
   clear() {}

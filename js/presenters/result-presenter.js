@@ -15,10 +15,7 @@ export default class ResultPresenter {
     };
   }
 
-  /**
-   * @return {Element}
-   */
-  get screen() {
-    return this.view.element;
+  show() {
+    this.view.show();
   }
 }

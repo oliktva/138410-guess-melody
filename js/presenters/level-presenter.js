@@ -35,17 +35,14 @@ export default class LevelPresenter {
     };
   }
 
-  /**
-   * @return {Element}
-   */
-  get screen() {
+  show() {
     this.timer.start();
 
     this.view.element.appendChild(this.timerBlock.element);
     this.view.element.appendChild(this.mistakesBlock.element);
     this.view.element.appendChild(this.levelBlock.element);
 
-    return this.view.element;
+    this.view.show();
   }
 
   _stopGame() {

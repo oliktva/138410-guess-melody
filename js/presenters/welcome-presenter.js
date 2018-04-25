@@ -12,10 +12,7 @@ export default class WelcomePresenter {
     };
   }
 
-  /**
-   * @return {Element}
-   */
-  get screen() {
-    return this.view.element;
+  show() {
+    this.view.show();
   }
 }
