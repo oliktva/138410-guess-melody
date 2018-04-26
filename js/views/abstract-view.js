@@ -1,4 +1,13 @@
-import {changeView} from '../helpers/utils.js';
+/**
+ * @param {Element} element
+ */
+export const changeView = (element) => {
+  if (element) {
+    const main = document.querySelector(`.main-container`);
+    main.innerHTML = ``;
+    main.appendChild(element);
+  }
+};
 
 /**
  * @param {string} markup

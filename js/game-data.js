@@ -34,7 +34,7 @@ export const adaptData = (data) => {
 
       result.answers = level.answers.map((answer) => ({
         audio: answer.src,
-        isCorrect: answer.genre === data.genre
+        isCorrect: answer.genre === level.genre
       }));
     }
     return result;

@@ -63,14 +63,3 @@ export const getDeclensionWord = (count, variants) => {
 export const copyObject = (object) => {
   return JSON.parse(JSON.stringify(object));
 };
-
-/**
- * @param {Element} element
- */
-export const changeView = (element) => {
-  if (element) {
-    const main = document.querySelector(`.main-container`);
-    main.innerHTML = ``;
-    main.appendChild(element);
-  }
-};
