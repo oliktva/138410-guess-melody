@@ -2,14 +2,7 @@ import App from '../app.js';
 
 import LevelView from '../views/level-view.js';
 
-import TimerBlock from '../components/timer-block.js';
-import MistakesBlock from '../components/mistakes-block.js';
-import ArtistBlock from '../components/artist-block.js';
-import GenreBlock from '../components/genre-block.js';
-
 import Timer from '../helpers/timer.js';
-
-import {ARTIST} from '../game-data.js';
 
 export default class LevelPresenter {
   /**
@@ -17,43 +10,25 @@ export default class LevelPresenter {
    */
   constructor(model) {
     this.model = model;
-    this.view = new LevelView();
-
-    const level = this.model.currentLevelResource;
-    const time = this.model.remainingTime;
-
-    this.timer = new Timer(time, () => {
+    this.timer = new Timer(this.model.remainingTime, () => {
       this.model.decreaseRemainingTime();
       this._updateTimer(this.model.remainingTime);
     });
-    this.timerBlock = new TimerBlock(time);
-    this.mistakesBlock = new MistakesBlock(this.model.mistakes);
-    this.levelBlock = level.type === ARTIST ? new ArtistBlock(level) : new GenreBlock(level);
 
-    this.levelBlock.nextViewHandler = (evt) => {
+    this.view = new LevelView(this.model);
+    this.view.levelBlock.nextViewHandler = (evt) => {
       this._nextViewHandler(evt);
     };
   }
 
-  /**
-   * @return {Element}
-   */
-  get screen() {
+  show() {
     this.timer.start();
-
-    this.view.element.appendChild(this.timerBlock.element);
-    this.view.element.appendChild(this.mistakesBlock.element);
-    this.view.element.appendChild(this.levelBlock.element);
-
-    return this.view.element;
+    this.view.show();
   }
 
   _stopGame() {
     this.timer.stop();
     App.showResult();
-    this.levelBlock.clear();
-    this.timerBlock.clear();
-    this.mistakesBlock.clear();
     this.view.clear();
   }
 
@@ -63,7 +38,7 @@ export default class LevelPresenter {
   _nextViewHandler(evt) {
     evt.preventDefault();
 
-    const isCorrect = this.model.checkAnswers(this.levelBlock.gamerAnswers);
+    const isCorrect = this.model.checkAnswers(this.view.levelBlock.gamerAnswers);
     this.model.addGamerResult({result: isCorrect, time: this.model.remainingTime});
 
     if (!isCorrect) {
@@ -86,28 +61,15 @@ export default class LevelPresenter {
     if (remainingTime === 0) {
       this._stopGame();
     } else {
-      this.timerBlock.update(remainingTime);
+      this.view.timerBlock.update(remainingTime);
     }
   }
 
   _updateMistakes() {
-    this.mistakesBlock.update(this.model.mistakes);
+    this.view.mistakesBlock.update(this.model.mistakes);
   }
 
   _updateLevel() {
-    const view = this.model.currentLevelResource.type === ARTIST ? new ArtistBlock(this.model.currentLevelResource) : new GenreBlock(this.model.currentLevelResource);
-    view.nextViewHandler = (event) => {
-      this._nextViewHandler(event);
-    };
-
-    this._updateLevelView(view, this.levelBlock);
-  }
-
-  /**
-   * @param  {object} newView
-   */
-  _updateLevelView(newView) {
-    this.view.element.replaceChild(newView.element, this.levelBlock.element);
-    this.levelBlock = newView;
+    this.view.updateLevel(this.model.currentLevelResource, (evt) => this._nextViewHandler(evt));
   }
 }

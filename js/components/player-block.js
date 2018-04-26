@@ -25,7 +25,7 @@ export default class PlayerBlock extends AbstractView {
     return (
       `<div class="player-wrapper">
         <div class="player">
-          <audio src="${this._audio.src}"${autoplayAttr}></audio>
+          <audio src="${this._audio}"${autoplayAttr}></audio>
           <button class="player-control player-control--${mod}"></button>
           <div class="player-track">
             <span class="player-status"></span>
