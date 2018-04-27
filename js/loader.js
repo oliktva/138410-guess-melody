@@ -1,10 +1,16 @@
-import {adaptData} from './game-data';
+import {adaptData, adaptResults} from './game-data';
 
 const URL = `https://es.dump.academy/guess-melody`;
 
-const NAME = `cat`;
+const NAME = `meow`;
 const APP_ID = 138410;
 
+/**
+ * @param {object} response
+ * @param {Array} permittedErrors
+ * @param {any} value
+ * @return {any}
+ */
 const checkStatus = (response, permittedErrors = [], value) => {
   if (response.ok) {
     return response;
@@ -15,6 +21,10 @@ const checkStatus = (response, permittedErrors = [], value) => {
   }
 };
 
+/**
+ * @param {object} res
+ * @return {object}
+ */
 const toJSON = (res) => {
   if (typeof res.json === `function`) {
     return res.json();
@@ -24,6 +34,7 @@ const toJSON = (res) => {
 };
 
 export default class Loader {
+  /** @return {Promise} */
   static loadData() {
     return fetch(`${URL}/questions`)
         .then(checkStatus)
@@ -31,9 +42,23 @@ export default class Loader {
         .then(adaptData);
   }
 
+  /** @return {Promise} */
   static loadResults() {
     return fetch(`${URL}/stats/${APP_ID}-${NAME}`)
         .then((response) => checkStatus(response, [404], []))
-        .then(toJSON);
+        .then(toJSON)
+        .then(adaptResults);
+  }
+
+  /**
+   * @param {object} data
+   * @return {Promise}
+   * */
+  static postResults(data) {
+    return fetch(`${URL}/stats/${APP_ID}-${NAME}`, {
+      method: `post`,
+      body: JSON.stringify(data),
+      headers: {'Content-Type': `application/json`},
+    }).then(checkStatus);
   }
 }

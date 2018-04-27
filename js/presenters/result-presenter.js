@@ -10,7 +10,7 @@ export default class ResultPresenter {
     this.model = model;
     this.view = new ResultView(model.result);
     this.view.replayHandler = () => {
-      App.showWelcome();
+      App.showGame();
       this.view.clear();
     };
   }

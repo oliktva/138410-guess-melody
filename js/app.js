@@ -16,12 +16,12 @@ export default class App {
   }
 
   static showWelcome() {
-    clearState();
     const welcome = new WelcomePresenter(getState());
     welcome.show();
   }
 
   static showGame() {
+    clearState();
     const level = new LevelPresenter(new LevelModel(getState()));
     level.show();
   }
