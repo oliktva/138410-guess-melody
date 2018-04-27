@@ -2,7 +2,7 @@ import {adaptData, adaptResults} from './game-data';
 
 const URL = `https://es.dump.academy/guess-melody`;
 
-const NAME = `cat`;
+const NAME = `meow`;
 const APP_ID = 138410;
 
 /**
