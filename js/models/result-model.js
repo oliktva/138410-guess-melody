@@ -1,5 +1,7 @@
 import Result from '../helpers/result.js';
 
+import Loader from '../loader.js';
+
 export default class ResultModel {
   /**
    * @param  {object} data
@@ -17,7 +19,10 @@ export default class ResultModel {
 
     const {score, info} = new Result(gamerResults, this._data.results);
     if (score !== -1) {
-      this._data.results.push(score);
+      Loader.postResults({
+        answers: gamerResults,
+        score
+      });
     }
 
     return info;

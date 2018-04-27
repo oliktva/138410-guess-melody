@@ -12,6 +12,10 @@ export const GameLimit = {
   TIME: 300
 };
 
+/**
+ * @param {Array} data
+ * @return {Array}
+ */
 export const adaptData = (data) => {
   return data.map((level) => {
     let result = {};
@@ -41,6 +45,18 @@ export const adaptData = (data) => {
   });
 };
 
+/**
+ * @param {Array} results
+ * @return {Array}
+ */
+export const adaptResults = (results) => {
+  if (!results.length) {
+    return results;
+  }
+
+  return results.map((result) => result.score);
+};
+
 const initialState = Object.freeze({
   remainingTime: GameLimit.TIME,
   mistakes: 0,
@@ -53,6 +69,10 @@ const initialState = Object.freeze({
 
 const state = copyObject(initialState);
 
+/**
+ * @param {string} key
+ * @param {Array} data
+ */
 export const updateState = (key, data) => {
   if (key === `resources`) {
     state.levels.resources = data;
@@ -62,6 +82,7 @@ export const updateState = (key, data) => {
   }
 };
 
+/** @return {object} */
 export const getState = () => {
   return state;
 };
