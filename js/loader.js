@@ -57,7 +57,8 @@ export default class Loader {
   static postResults(data) {
     return fetch(`${URL}/stats/${APP_ID}-${NAME}`, {
       method: `post`,
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
+      headers: {'Content-Type': `application/json`},
     }).then(checkStatus);
   }
 }
