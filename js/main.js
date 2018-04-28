@@ -1,11 +1,12 @@
-import Loader from './loader.js';
+import 'babel-polyfill';
+import 'whatwg-fetch';
 
+import Loader from './loader.js';
 import App from './app.js';
 
 import {updateState} from './game-data.js';
 
 App.showLoader();
-
 Promise.all([
   Loader.loadData(),
   Loader.loadResults()
