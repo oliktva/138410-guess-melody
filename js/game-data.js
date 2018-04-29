@@ -8,6 +8,7 @@ export const GENRE = `genre`;
 export const GameLimit = {
   LEVELS_VALUE: 10,
   MAX_FALSE_ANSWERS_VALUE: 3,
+  LOSS_POINTS_VALUE: -1,
   FAST_ANSWER_TIME: 30,
   TIME: 300
 };
@@ -18,7 +19,7 @@ export const GameLimit = {
  */
 export const adaptData = (data) => {
   return data.map((level) => {
-    let result = {};
+    const result = {};
     result.type = level.type;
     if (level.type === ARTIST) {
       result.question = {
