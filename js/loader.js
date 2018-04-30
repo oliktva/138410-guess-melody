@@ -4,6 +4,7 @@ const URL = `https://es.dump.academy/guess-melody`;
 
 const NAME = `meow`;
 const APP_ID = 138410;
+const LOAD_SONG_TIMEOUT = 30000;
 
 /**
  * @param {object} response
@@ -49,7 +50,7 @@ export default class Loader {
 
       const timeout = setTimeout(() => {
         reject(new Error(`Возникла ошибка при загрузке композиции`));
-      }, 30000);
+      }, LOAD_SONG_TIMEOUT);
 
       song.addEventListener(`canplaythrough`, () => {
         clearTimeout(timeout);
