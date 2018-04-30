@@ -27,7 +27,7 @@ export default class ArtistLevelView extends AbstractView {
 
   /** @return {string} */
   get template() {
-    const {question: {title}, answers} = this._props;
+    const {question: {title}, answers} = this._props.level;
 
     return (
       `<div class="main-wrap">
@@ -45,8 +45,11 @@ export default class ArtistLevelView extends AbstractView {
     if (!this._element) {
       this._element = super.element;
 
-      const {audio} = this._props.question;
-      const player = new PlayerBlock(audio, true);
+      const {
+        level: {question: {audio: audioUrl}},
+        audio
+      } = this._props;
+      const player = new PlayerBlock(audio[audioUrl], true);
 
       this._element.querySelector(`.player-container`).appendChild(player.element);
     }

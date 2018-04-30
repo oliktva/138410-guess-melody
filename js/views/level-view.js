@@ -16,10 +16,11 @@ export default class LevelView extends AbstractView {
     this._props = props;
     const level = this._props.currentLevelResource;
     const time = this._props.remainingTime;
+    const audio = this._props.audio;
 
     this.timerBlock = new TimerBlock(time);
     this.mistakesBlock = new MistakesBlock(this._props.mistakes);
-    this.levelBlock = level.type === ARTIST ? new ArtistBlock(level) : new GenreBlock(level);
+    this.levelBlock = level.type === ARTIST ? new ArtistBlock({level, audio}) : new GenreBlock({level, audio});
   }
 
   /** @return {string} */
@@ -37,10 +38,10 @@ export default class LevelView extends AbstractView {
     return element;
   }
 
-  updateLevel(currentLevelResource, nextViewHandler) {
+  updateLevel(currentLevelResource, audio, nextViewHandler) {
     const newView = currentLevelResource.type === ARTIST ?
-      new ArtistBlock(currentLevelResource) :
-      new GenreBlock(currentLevelResource);
+      new ArtistBlock({level: currentLevelResource, audio}) :
+      new GenreBlock({level: currentLevelResource, audio});
 
     newView.nextViewHandler = nextViewHandler;
 

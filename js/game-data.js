@@ -47,6 +47,23 @@ export const adaptData = (data) => {
 };
 
 /**
+ * @param {Array} data
+ * @return {Array}
+ */
+export const getAudioUrls = (data) => {
+  return data.reduce((audioResources, level) => {
+    if (level.type === ARTIST) {
+      audioResources.push(level.question.audio);
+    } else {
+      level.answers.forEach((answer) => {
+        audioResources.push(answer.audio);
+      });
+    }
+    return audioResources;
+  }, []);
+};
+
+/**
  * @param {Array} results
  * @return {Array}
  */
@@ -72,7 +89,7 @@ const state = copyObject(initialState);
 
 /**
  * @param {string} key
- * @param {Array} data
+ * @param {Array | object} data
  */
 export const updateState = (key, data) => {
   if (key === `resources`) {
@@ -80,6 +97,9 @@ export const updateState = (key, data) => {
   }
   if (key === `results`) {
     state.results = data;
+  }
+  if (key === `audio`) {
+    state.audio = data;
   }
 };
 

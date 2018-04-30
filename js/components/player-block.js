@@ -19,13 +19,12 @@ export default class PlayerBlock extends AbstractView {
 
   /** @return {string} */
   get template() {
-    const autoplayAttr = this._autoplay ? ` autoplay` : ``;
     const mod = this._autoplay ? `pause` : `play`;
 
     return (
       `<div class="player-wrapper">
         <div class="player">
-          <audio src="${this._audio}"${autoplayAttr}></audio>
+          <div class="player-audio"></div>
           <button class="player-control player-control--${mod}"></button>
           <div class="player-track">
             <span class="player-status"></span>
@@ -35,13 +34,26 @@ export default class PlayerBlock extends AbstractView {
     );
   }
 
+  /** @return {Element} */
+  get element() {
+    const element = super.element;
+    const audioWrapper = element.querySelector(`.player-audio`);
+
+    if (!audioWrapper.querySelector(`audio`)) {
+      this._audio.autoplay = this._autoplay;
+      element.querySelector(`.player-audio`).appendChild(this._audio);
+    }
+
+    return element;
+  }
+
   /** @param {Element} current */
   _stopOther(current) {
     Array.from(document.querySelectorAll(`audio`)).forEach((audio) => {
       if (!(audio === current || audio.paused)) {
         audio.pause();
         audio.currentTime = 0;
-        toggleButton(audio.nextElementSibling);
+        toggleButton(audio.parentElement.nextElementSibling);
       }
     });
   }
