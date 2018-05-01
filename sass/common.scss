@@ -73,8 +73,20 @@ body {
   margin-top: -160px;
 }
 
+.message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 8px;
+  text-align: center;
+  color: #000;
+  background-color: #ffc396;
+}
+
 .loader {
   font-size: 0;
+
   span {
     background-color: #fff;
     content: '';

@@ -1,4 +1,5 @@
 import AbstractView from './abstract-view.js';
+import HeaderBlock from '../components/header-block.js';
 
 export default class LoaderView extends AbstractView {
   constructor() {
@@ -7,9 +8,11 @@ export default class LoaderView extends AbstractView {
 
   /** @return {string} */
   get template() {
+    const header = new HeaderBlock();
 
     return (
       `<section class="main main--loader">
+        ${header.template}
         <div class="loader">
           <span></span>
           <span></span>
