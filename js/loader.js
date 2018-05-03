@@ -74,9 +74,13 @@ export default class Loader {
   /** @return {Promise} */
   static async loadResults() {
     const response = await fetch(`${URL}/stats/${APP_ID}-${NAME}`);
-    checkStatus(response, [404], []);
+    const checkedData = await checkStatus(response, [404], []);
+    if (checkedData.length === 0) {
+      return checkedData;
+    }
+
     const responseData = await response.json();
-    return adaptResults(responseData);
+    return await adaptResults(responseData);
   }
 
   /**
