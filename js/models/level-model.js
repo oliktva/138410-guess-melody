@@ -26,6 +26,13 @@ export default class LevelModel {
     return this._data.mistakes;
   }
 
+  /**
+   * @return  {object}
+   */
+  get audio() {
+    return this._data.audio;
+  }
+
   addMistake() {
     this._data.mistakes++;
   }

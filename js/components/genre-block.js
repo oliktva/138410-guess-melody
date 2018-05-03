@@ -28,7 +28,7 @@ export default class GenreLevelView extends AbstractView {
 
   /** @return {string} */
   get template() {
-    const {question: {title}, answers} = this._props;
+    const {question: {title}, answers} = this._props.level;
 
     return (
       `<div class="main-wrap">
@@ -50,11 +50,14 @@ export default class GenreLevelView extends AbstractView {
   /** @return {Element} */
   get element() {
     if (!this._element) {
-      this._element = super.element;
+      const {
+        level: {answers},
+        audio
+      } = this._props;
 
-      const {answers} = this._props;
-      answers.forEach(({audio}, i) => {
-        const player = new PlayerBlock(audio);
+      this._element = super.element;
+      answers.forEach(({audio: audioUrl}, i) => {
+        const player = new PlayerBlock(audio[audioUrl]);
         this._element.querySelector(`.player-container-${i + 1}`).appendChild(player.element);
       });
     }

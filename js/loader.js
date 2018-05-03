@@ -1,9 +1,10 @@
-import {adaptData, adaptResults} from './game-data';
+import {adaptData, adaptResults, getAudioUrls} from './game-data';
 
 const URL = `https://es.dump.academy/guess-melody`;
 
 const NAME = `meow`;
 const APP_ID = 138410;
+const LOAD_SONG_TIMEOUT = 30000;
 
 /**
  * @param {object} response
@@ -21,33 +22,65 @@ const checkStatus = (response, permittedErrors = [], value) => {
   }
 };
 
-/**
- * @param {object} res
- * @return {object}
- */
-const toJSON = (res) => {
-  if (typeof res.json === `function`) {
-    return res.json();
-  } else {
-    return res;
-  }
-};
-
 export default class Loader {
-  /** @return {Promise} */
-  static loadData() {
-    return fetch(`${URL}/questions`)
-        .then(checkStatus)
-        .then(toJSON)
-        .then(adaptData);
+  constructor() {
+    this._songs = {};
+  }
+
+  getAudio() {
+    return this._songs;
   }
 
   /** @return {Promise} */
-  static loadResults() {
-    return fetch(`${URL}/stats/${APP_ID}-${NAME}`)
-        .then((response) => checkStatus(response, [404], []))
-        .then(toJSON)
-        .then(adaptResults);
+  static async loadData() {
+    const response = await fetch(`${URL}/questions`);
+    checkStatus(response);
+    const responseData = await response.json();
+    return adaptData(responseData);
+  }
+
+  /**
+   * @param {string} url
+   * @return {Promise}
+   */
+  loadSong(url) {
+    return new Promise((resolve, reject) => {
+      const song = new Audio();
+      this._songs[url] = song;
+
+      const timeout = setTimeout(() => {
+        reject(new Error(`Возникла ошибка при загрузке композиции`));
+      }, LOAD_SONG_TIMEOUT);
+
+      song.addEventListener(`canplaythrough`, () => {
+        clearTimeout(timeout);
+        resolve();
+      }, false);
+
+      song.src = url;
+      song.load();
+    });
+  }
+
+  /**
+   * @param {Array} resources
+   * @return {Promise}
+   */
+  async loadAudio(resources) {
+    const audioUrls = getAudioUrls(resources);
+    return await Promise.all(audioUrls.map((src) => this.loadSong(src)));
+  }
+
+  /** @return {Promise} */
+  static async loadResults() {
+    const response = await fetch(`${URL}/stats/${APP_ID}-${NAME}`);
+    const checkedData = await checkStatus(response, [404], []);
+    if (checkedData.length === 0) {
+      return checkedData;
+    }
+
+    const responseData = await response.json();
+    return await adaptResults(responseData);
   }
 
   /**

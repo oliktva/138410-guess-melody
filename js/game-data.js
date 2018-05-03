@@ -8,6 +8,7 @@ export const GENRE = `genre`;
 export const GameLimit = {
   LEVELS_VALUE: 10,
   MAX_FALSE_ANSWERS_VALUE: 3,
+  LOSS_POINTS_VALUE: -1,
   FAST_ANSWER_TIME: 30,
   TIME: 300
 };
@@ -18,7 +19,7 @@ export const GameLimit = {
  */
 export const adaptData = (data) => {
   return data.map((level) => {
-    let result = {};
+    const result = {};
     result.type = level.type;
     if (level.type === ARTIST) {
       result.question = {
@@ -43,6 +44,23 @@ export const adaptData = (data) => {
     }
     return result;
   });
+};
+
+/**
+ * @param {Array} data
+ * @return {Array}
+ */
+export const getAudioUrls = (data) => {
+  return data.reduce((audioResources, level) => {
+    if (level.type === ARTIST) {
+      audioResources.push(level.question.audio);
+    } else {
+      level.answers.forEach((answer) => {
+        audioResources.push(answer.audio);
+      });
+    }
+    return audioResources;
+  }, []);
 };
 
 /**
@@ -71,7 +89,7 @@ const state = copyObject(initialState);
 
 /**
  * @param {string} key
- * @param {Array} data
+ * @param {Array | object} data
  */
 export const updateState = (key, data) => {
   if (key === `resources`) {
@@ -79,6 +97,9 @@ export const updateState = (key, data) => {
   }
   if (key === `results`) {
     state.results = data;
+  }
+  if (key === `audio`) {
+    state.audio = data;
   }
 };
 

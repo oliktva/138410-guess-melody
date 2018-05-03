@@ -1,6 +1,7 @@
 import Result from '../helpers/result.js';
-
 import Loader from '../loader.js';
+
+import {GameLimit} from '../game-data.js';
 
 export default class ResultModel {
   /**
@@ -18,7 +19,7 @@ export default class ResultModel {
     const {gamerResults} = this._data;
 
     const {score, info} = new Result(gamerResults, this._data.results);
-    if (score !== -1) {
+    if (score !== GameLimit.LOSS_POINTS_VALUE) {
       this._data.results.push(score);
       Loader.postResults({
         answers: gamerResults,

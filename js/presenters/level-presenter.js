@@ -70,6 +70,6 @@ export default class LevelPresenter {
   }
 
   _updateLevel() {
-    this.view.updateLevel(this.model.currentLevelResource, (evt) => this._nextViewHandler(evt));
+    this.view.updateLevel(this.model.currentLevelResource, this.model.audio, (evt) => this._nextViewHandler(evt));
   }
 }

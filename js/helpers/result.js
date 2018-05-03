@@ -66,7 +66,7 @@ export default class Result {
     this._mistakes = this._answers.filter((answer) => !answer.result).length;
 
     if (this._answers.length < GameLimit.LEVELS_VALUE || this._mistakes === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
-      return -1;
+      return GameLimit.LOSS_POINTS_VALUE;
     }
 
     return this._answers.reduce((score, answer, index) => {
@@ -100,7 +100,7 @@ export default class Result {
       return null;
     }
 
-    if (this._score === -1) {
+    if (this._score === GameLimit.LOSS_POINTS_VALUE) {
       if (this._mistakes === GameLimit.MAX_FALSE_ANSWERS_VALUE) {
         return GameResult.ATTEMPTS_ENDED;
       }
