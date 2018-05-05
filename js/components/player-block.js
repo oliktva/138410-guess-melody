@@ -102,10 +102,10 @@ export default class PlayerBlock extends AbstractView {
   }
 
   clear() {
-  //   if (this._element) {
-  //     this._audio.removeEventListener(`play`, this.playAudioHandler);
-  //     this._audio.removeEventListener(`pause`, this.pauseAudioHandler);
-  //     this._audio.currentTime = 0;
-  //   }
+    if (this._element) {
+      this._audio.removeEventListener(`play`, this.playAudioHandler);
+      this._audio.removeEventListener(`pause`, this.pauseAudioHandler);
+      this._audio.currentTime = 0;
+    }
   }
 }
