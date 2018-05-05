@@ -24,6 +24,7 @@ export default class GenreLevelView extends AbstractView {
   constructor(props) {
     super();
     this._props = props;
+    this._players = [];
   }
 
   /** @return {string} */
@@ -57,8 +58,9 @@ export default class GenreLevelView extends AbstractView {
 
       this._element = super.element;
       answers.forEach(({audio: audioUrl}, i) => {
-        const player = new PlayerBlock(audio[audioUrl]);
+        const player = new PlayerBlock(audio.get(audioUrl));
         this._element.querySelector(`.player-container-${i + 1}`).appendChild(player.element);
+        this._players.push(player);
       });
     }
     return this._element;
@@ -99,6 +101,7 @@ export default class GenreLevelView extends AbstractView {
 
       answerForm.removeEventListener(`change`, (evt) => this._activateSubmitHandler(evt, answerForm, answer));
       answer.removeEventListener(`click`, this.nextViewHandler);
+      this._players.forEach((player) => player.clear());
       this._element = null;
     }
   }

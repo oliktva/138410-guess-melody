@@ -24,7 +24,7 @@ const checkStatus = (response, permittedErrors = [], value) => {
 
 export default class Loader {
   constructor() {
-    this._songs = {};
+    this._songs = new Map();
   }
 
   getAudio() {
@@ -46,7 +46,7 @@ export default class Loader {
   loadSong(url) {
     return new Promise((resolve, reject) => {
       const song = new Audio();
-      this._songs[url] = song;
+      this._songs.set(url, song);
 
       const timeout = setTimeout(() => {
         reject(new Error(`Возникла ошибка при загрузке композиции`));
@@ -68,7 +68,13 @@ export default class Loader {
    */
   async loadAudio(resources) {
     const audioUrls = getAudioUrls(resources);
-    return await Promise.all(audioUrls.map((src) => this.loadSong(src)));
+    const promises = [];
+    audioUrls.forEach((url) => {
+      if (!this._songs.has(url)) {
+        promises.push(this.loadSong(url));
+      }
+    });
+    return await Promise.all(promises);
   }
 
   /** @return {Promise} */

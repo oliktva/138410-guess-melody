@@ -14,9 +14,9 @@ export const changeView = (element) => {
  * @return {Element}
  */
 const getElementFromTemplate = function (markup) {
-  let template = document.createElement(`template`);
-  template.innerHTML = markup.trim();
-  return template.content.firstChild;
+  let wrapper = document.createElement(`div`);
+  wrapper.innerHTML = markup.trim();
+  return wrapper.firstChild;
 };
 
 export default class AbstractView {

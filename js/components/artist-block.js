@@ -23,6 +23,7 @@ export default class ArtistLevelView extends AbstractView {
   constructor(props) {
     super();
     this._props = props;
+    this._player = null;
   }
 
   /** @return {string} */
@@ -49,9 +50,9 @@ export default class ArtistLevelView extends AbstractView {
         level: {question: {audio: audioUrl}},
         audio
       } = this._props;
-      const player = new PlayerBlock(audio[audioUrl], true);
+      this._player = new PlayerBlock(audio.get(audioUrl), true);
 
-      this._element.querySelector(`.player-container`).appendChild(player.element);
+      this._element.querySelector(`.player-container`).appendChild(this._player.element);
     }
     return this._element;
   }
@@ -77,6 +78,7 @@ export default class ArtistLevelView extends AbstractView {
   clear() {
     if (this._element) {
       this._element.querySelector(`form.main-list`).removeEventListener(`change`, this.nextViewHandler);
+      this._player.clear();
       this._element = null;
     }
   }
