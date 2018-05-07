@@ -38,6 +38,15 @@ export default class LevelView extends AbstractView {
     return element;
   }
 
+  _playFirstAudio() {
+    this.element.querySelector(`audio`).play();
+  }
+
+  show() {
+    super.show();
+    this._playFirstAudio();
+  }
+
   updateLevel(currentLevelResource, audio, nextViewHandler) {
     const newView = currentLevelResource.type === ARTIST ?
       new ArtistBlock({level: currentLevelResource, audio}) :
@@ -47,6 +56,7 @@ export default class LevelView extends AbstractView {
 
     this.element.replaceChild(newView.element, this.levelBlock.element);
     this.levelBlock = newView;
+    this._playFirstAudio();
   }
 
   clear() {
